@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 private const val CALL_STACK_DEPTH = 2
 
-private class EmptyObserver<T>(
+private class SafeObserver<T>(
     val tag: String,
     val handler: OnEvenHandler<T>? = null
 ) :
@@ -48,7 +48,7 @@ private class EmptyObserver<T>(
     }
 
     override fun onError(err: Throwable) {
-        Timber.w(err, "EmptyObserver got OnError at $tag")
+        Timber.w(err, "SafeObserver got OnError at $tag")
         handler?.onError?.invoke(err) ?: throw RuntimeException("Unhandled rx onError at $tag", err)
     }
 
@@ -141,7 +141,7 @@ private class OnEvenHandler<T> : OnSingleHandler<T>, OnObservableHandler<T>, OnM
 
 fun Completable.subscribeSafely(action: OnCompletableHandler.() -> Unit): Disposable {
     return subscribeWith(
-        EmptyObserver(
+        SafeObserver(
             getCallPlace(CALL_STACK_DEPTH),
             OnEvenHandler<Any>().apply(action)
         )
@@ -149,14 +149,14 @@ fun Completable.subscribeSafely(action: OnCompletableHandler.() -> Unit): Dispos
 }
 
 fun Completable.subscribeSafely(emitter: CompletableEmitter): Disposable {
-    return subscribeWith(EmptyObserver(getCallPlace(CALL_STACK_DEPTH), OnEvenHandler<Any>().apply {
+    return subscribeWith(SafeObserver(getCallPlace(CALL_STACK_DEPTH), OnEvenHandler<Any>().apply {
         onComplete = emitter::onComplete
         onError = emitter::onError
     }))
 }
 
 fun <T> Observable<T>.subscribeSafely(observer: Observer<T>): Disposable {
-    return subscribeWith(EmptyObserver(getCallPlace(CALL_STACK_DEPTH), OnEvenHandler<T>().apply {
+    return subscribeWith(SafeObserver(getCallPlace(CALL_STACK_DEPTH), OnEvenHandler<T>().apply {
         onComplete = observer::onComplete
         onError = observer::onError
         onNext = observer::onNext
@@ -164,7 +164,7 @@ fun <T> Observable<T>.subscribeSafely(observer: Observer<T>): Disposable {
 }
 
 fun <T> Observable<T>.subscribeSafely(observer: Emitter<T>): Disposable {
-    return subscribeWith(EmptyObserver(getCallPlace(CALL_STACK_DEPTH), OnEvenHandler<T>().apply {
+    return subscribeWith(SafeObserver(getCallPlace(CALL_STACK_DEPTH), OnEvenHandler<T>().apply {
         onComplete = observer::onComplete
         onError = observer::onError
         onNext = observer::onNext
@@ -172,26 +172,26 @@ fun <T> Observable<T>.subscribeSafely(observer: Emitter<T>): Disposable {
 }
 
 fun <T> Single<T>.subscribeSafely(observer: SingleEmitter<T>): Disposable {
-    return subscribeWith(EmptyObserver(getCallPlace(CALL_STACK_DEPTH), OnEvenHandler<T>().apply {
+    return subscribeWith(SafeObserver(getCallPlace(CALL_STACK_DEPTH), OnEvenHandler<T>().apply {
         onSuccess = observer::onSuccess
         onError = observer::onError
     }))
 }
 
 fun <T> Observable<T>.subscribeSafely(): Disposable {
-    return subscribeWith(EmptyObserver(getCallPlace(CALL_STACK_DEPTH)))
+    return subscribeWith(SafeObserver(getCallPlace(CALL_STACK_DEPTH)))
 }
 
 fun <T> Maybe<T>.subscribeSafely(): Disposable {
-    return subscribeWith(EmptyObserver(getCallPlace(CALL_STACK_DEPTH)))
+    return subscribeWith(SafeObserver(getCallPlace(CALL_STACK_DEPTH)))
 }
 
 fun <T> Single<T>.subscribeSafely(): Disposable {
-    return subscribeWith(EmptyObserver(getCallPlace(CALL_STACK_DEPTH)))
+    return subscribeWith(SafeObserver(getCallPlace(CALL_STACK_DEPTH)))
 }
 
 fun Completable.subscribeSafely(): Disposable {
-    return subscribeWith(EmptyObserver<Unit>(getCallPlace(CALL_STACK_DEPTH)))
+    return subscribeWith(SafeObserver<Unit>(getCallPlace(CALL_STACK_DEPTH)))
 }
 
 fun <T> Flowable<T>.subscribeSafely(): Disposable {
@@ -200,7 +200,7 @@ fun <T> Flowable<T>.subscribeSafely(): Disposable {
 
 fun <T> Observable<T>.subscribeSafely(action: OnObservableHandler<T>.() -> Unit): Disposable {
     return subscribeWith(
-        EmptyObserver(
+        SafeObserver(
             getCallPlace(CALL_STACK_DEPTH),
             OnEvenHandler<T>().apply(action)
         )
@@ -209,7 +209,7 @@ fun <T> Observable<T>.subscribeSafely(action: OnObservableHandler<T>.() -> Unit)
 
 fun <T> Single<T>.subscribeSafely(action: OnSingleHandler<T>.() -> Unit): Disposable {
     return subscribeWith(
-        EmptyObserver(
+        SafeObserver(
             getCallPlace(CALL_STACK_DEPTH),
             OnEvenHandler<T>().apply(action)
         )
@@ -218,7 +218,7 @@ fun <T> Single<T>.subscribeSafely(action: OnSingleHandler<T>.() -> Unit): Dispos
 
 fun <T> Maybe<T>.subscribeSafely(action: OnMaybeHandler<T>.() -> Unit): Disposable {
     return subscribeWith(
-        EmptyObserver(
+        SafeObserver(
             getCallPlace(CALL_STACK_DEPTH),
             OnEvenHandler<T>().apply(action)
         )

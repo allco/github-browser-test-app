@@ -21,11 +21,11 @@ import timber.log.Timber
 
 class WebViewModelImpl(
     context: Context,
-    private val urlFeed: Observable<String>,
+    disposables: CompositeDisposable,
     networkState: Observable<Boolean>,
-    private val overrideLoading: ((url: Uri) -> WebViewModel.Result)?,
     onChooseFile: ((FileChooserRequest) -> Maybe<Array<Uri>>)?,
-    disposables: CompositeDisposable
+    private val urlFeed: Observable<String>,
+    private val overrideLoading: ((url: Uri) -> WebViewModel.Result)?
 ) : WebViewModel {
 
     sealed class State {

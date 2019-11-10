@@ -170,6 +170,9 @@ fun <T, R> LiveData<T>.mapNotNull(func: (T) -> R?): LiveData<R> =
 fun <T, R> LiveData<T>.map(func: (T?) -> R?): LiveData<R> =
     Transformations.map(this, func)
 
+/**
+ * @see Transformations.distinctUntilChanged
+ */
 fun <T> LiveData<T>.distinctUntilChanged(): LiveData<T> =
     Transformations.distinctUntilChanged(this)
 

@@ -17,8 +17,15 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
+interface NetworkReporter {
+    /**
+     * @returns a stream which emits `true` if the device is/gets online or `false` otherwise,
+     */
+    fun states(): Observable<Boolean>
+}
+
 @Singleton
-class NetworkReporter @Inject constructor(context: Context) {
+class NetworkReporterImpl @Inject constructor(context: Context) : NetworkReporter {
 
     @RequiresApi(Build.VERSION_CODES.N)
     private class NetworkReporterApi24(context: Context) {
@@ -71,8 +78,5 @@ class NetworkReporter @Inject constructor(context: Context) {
             .refCount()
     }
 
-    /**
-     * @returns true if the device is online, false otherwise
-     */
-    fun states(): Observable<Boolean> = connectivityStatesStream
+    override fun states(): Observable<Boolean> = connectivityStatesStream
 }
