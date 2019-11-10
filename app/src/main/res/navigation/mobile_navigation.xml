@@ -9,21 +9,21 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="se.allco.githubbrowser.ui.home.HomeFragment"
+        android:name="se.allco.githubbrowser.app.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home"
         />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="se.allco.githubbrowser.ui.dashboard.DashboardFragment"
+        android:name="se.allco.githubbrowser.app.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard"
         />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="se.allco.githubbrowser.ui.notifications.NotificationsFragment"
+        android:name="se.allco.githubbrowser.app.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications"
         />

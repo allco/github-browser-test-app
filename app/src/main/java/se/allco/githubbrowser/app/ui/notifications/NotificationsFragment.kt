@@ -1,4 +1,4 @@
-package se.allco.githubbrowser.ui.notifications
+package se.allco.githubbrowser.app.ui.notifications
 
 import android.os.Bundle
 import android.view.LayoutInflater

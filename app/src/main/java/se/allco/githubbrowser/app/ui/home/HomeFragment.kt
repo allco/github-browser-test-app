@@ -1,4 +1,4 @@
-package se.allco.githubbrowser.ui.home
+package se.allco.githubbrowser.app.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
