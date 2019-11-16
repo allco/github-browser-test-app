@@ -19,14 +19,14 @@ import se.allco.githubbrowser.common.utils.map
 import se.allco.githubbrowser.common.utils.toLiveData
 import timber.log.Timber
 
-class WebViewModelImpl(
+class WebViewComponentModelImpl(
     context: Context,
     disposables: CompositeDisposable,
     networkState: Observable<Boolean>,
     onChooseFile: ((FileChooserRequest) -> Maybe<Array<Uri>>)?,
-    private val urlFeed: Observable<String>,
-    private val overrideLoading: ((url: Uri) -> WebViewModel.Result)?
-) : WebViewModel {
+    private val overrideLoading: ((url: Uri) -> WebViewComponentModel.Result)?,
+    private val url: String
+) : WebViewComponentModel {
 
     sealed class State {
         class Error(@StringRes val res: Int = R.string.error_generic) : State()
@@ -41,7 +41,7 @@ class WebViewModelImpl(
         onChooseFile = onChooseFile,
         overrideLoading = { url: String? ->
             url?.let { shouldOverrideLoadingUrl(Uri.parse(it)) }
-                ?: false.also { Timber.w("WebViewModel: url is null") }
+                ?: false.also { Timber.w("WebViewComponentModel: url is null") }
         }
     )
 
@@ -54,7 +54,7 @@ class WebViewModelImpl(
      */
     private val destinationState: Observable<State> =
         networkState
-            .switchMap { onConnectivityChanged(it).startWith(State.Loading) }
+            .map { onConnectivityChanged(it) }
             .startWith(State.Loading)
             .distinctUntilChanged()
 
@@ -77,10 +77,10 @@ class WebViewModelImpl(
     private val aboutToFinish = MutableLiveData(false)
 
     private fun shouldOverrideLoadingUrl(uri: Uri): Boolean =
-        when (overrideLoading?.invoke(uri) ?: WebViewModel.Result.IGNORE) {
-            WebViewModel.Result.CONSUME_AND_FINISH -> true.also { aboutToFinish.postValue(true) }
-            WebViewModel.Result.CONSUME -> true
-            WebViewModel.Result.IGNORE -> false
+        when (overrideLoading?.invoke(uri) ?: WebViewComponentModel.Result.IGNORE) {
+            WebViewComponentModel.Result.CONSUME_AND_FINISH -> true.also { aboutToFinish.postValue(true) }
+            WebViewComponentModel.Result.CONSUME -> true
+            WebViewComponentModel.Result.IGNORE -> false
         }
 
     override val destination: LiveData<WebViewDestination> =
@@ -110,16 +110,16 @@ class WebViewModelImpl(
             .toLiveData(disposables)
             .map { it?.asNullable() }
 
-    private fun onConnectivityChanged(connectivity: Boolean): Observable<State> =
+    private fun onConnectivityChanged(connectivity: Boolean): State =
         when (connectivity) {
-            true -> urlFeed.map { State.Destination(WebViewDestination(it)) }
-            else -> Observable.just(State.Error(R.string.error_no_internet_connection))
+            true -> State.Destination(WebViewDestination(url))
+            else -> State.Error(R.string.error_no_internet_connection)
         }
 }
 
-private fun WebViewSettings.State.asState(): WebViewModelImpl.State =
+private fun WebViewSettings.State.asState(): WebViewComponentModelImpl.State =
     when (this) {
-        WebViewSettings.State.ERROR -> WebViewModelImpl.State.Error()
-        WebViewSettings.State.STARTED -> WebViewModelImpl.State.Loading
-        WebViewSettings.State.FINISHED -> WebViewModelImpl.State.Finished
+        WebViewSettings.State.ERROR -> WebViewComponentModelImpl.State.Error()
+        WebViewSettings.State.STARTED -> WebViewComponentModelImpl.State.Loading
+        WebViewSettings.State.FINISHED -> WebViewComponentModelImpl.State.Finished
     }

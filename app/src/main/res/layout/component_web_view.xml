@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="se.allco.githubbrowser.app.uicomponents.webview.WebViewComponentModel"
+            />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        >
+
+        <TextView
+            android:id="@+id/textError"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="10"
+            android:text="@{viewModel.errorMessage}"
+            bind:goneUnless="@{viewModel.errorMessage != null}"
+            tools:background="#AAFFFF00"
+            tools:text="@tools:sample/lorem/random"
+            />
+
+        <ProgressBar
+            android:id="@+id/spinner"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:indeterminate="true"
+            bind:goneUnless="@{viewModel.showLoading}"
+            tools:background="#AAFFAAFF"
+            tools:visibility="visible"
+            />
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="top|center_horizontal"
+            bind:destination="@{viewModel.destination}"
+            bind:goneUnless="@{viewModel.showContent}"
+            bind:settings="@{viewModel.settings}"
+            tools:alpha="0.5"
+            tools:background="#AAFFAAAA"
+            />
+
+    </FrameLayout>
+
+</layout>

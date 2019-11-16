@@ -13,7 +13,7 @@ import se.allco.githubbrowser.common.ui.databinding.webview.WebViewSettings
 import javax.inject.Inject
 import javax.inject.Provider
 
-interface WebViewModel {
+interface WebViewComponentModel {
     val settings: WebViewSettings
     val destination: LiveData<WebViewDestination>
     val showContent: LiveData<Boolean>
@@ -34,14 +34,14 @@ interface WebViewModel {
         var onChooseFile: ((FileChooserRequest) -> Maybe<Array<Uri>>)? = null
         var overrideLoading: ((uri: Uri) -> Result)? = null
 
-        fun build(urlFeed: Observable<String>, compositeDisposable: CompositeDisposable): WebViewModel =
-            WebViewModelImpl(
-                urlFeed = urlFeed,
+        fun build(url: String, scopedDisposable: CompositeDisposable): WebViewComponentModel =
+            WebViewComponentModelImpl(
+                url = url,
                 context = context,
                 networkState = networkState ?: networkReporterProvider.get().states(),
                 overrideLoading = overrideLoading,
                 onChooseFile = onChooseFile,
-                disposables = compositeDisposable
+                disposables = scopedDisposable
             )
     }
 }
