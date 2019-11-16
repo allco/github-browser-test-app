@@ -5,6 +5,7 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import se.allco.githubbrowser.app.BaseApplication
+import se.allco.githubbrowser.app.login.LoginActivity
 import javax.inject.Singleton
 
 @Singleton
@@ -25,4 +26,5 @@ interface AppComponent {
     }
 
     fun inject(baseApplication: BaseApplication)
+    fun inject(activity: LoginActivity)
 }

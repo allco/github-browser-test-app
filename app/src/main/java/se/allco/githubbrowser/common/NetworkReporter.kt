@@ -15,7 +15,6 @@ import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import javax.inject.Singleton
 
 interface NetworkReporter {
     /**
@@ -24,7 +23,6 @@ interface NetworkReporter {
     fun states(): Observable<Boolean>
 }
 
-@Singleton
 class NetworkReporterImpl @Inject constructor(context: Context) : NetworkReporter {
 
     @RequiresApi(Build.VERSION_CODES.N)
