@@ -1,7 +1,10 @@
-package se.allco.githubbrowser.app.ioc
+package se.allco.githubbrowser.app.di
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import se.allco.githubbrowser.common.NetworkReporter
@@ -17,4 +20,11 @@ class AppModule {
     @Provides
     @Singleton
     fun providesNetworkReporter(impl: NetworkReporterImpl): NetworkReporter = impl
+
+    @Provides
+    fun provideGsonBuilder() = GsonBuilder()
+
+    @Provides
+    fun provideSharedPreferences(context: Context): SharedPreferences =
+        context.getSharedPreferences("settings", Activity.MODE_PRIVATE)!!
 }

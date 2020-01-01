@@ -10,7 +10,7 @@
 
         <variable
             name="viewModel"
-            type="se.allco.githubbrowser.app.uicomponents.webview.WebViewComponentModel"
+            type="se.allco.githubbrowser.common.ui.components.WebViewComponentModel"
             />
 
     </data>

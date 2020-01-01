@@ -1,4 +1,4 @@
-package se.allco.githubbrowser.app.ioc
+package se.allco.githubbrowser.app.di
 
 import android.app.Application
 import android.content.Context
@@ -9,7 +9,7 @@ import se.allco.githubbrowser.app.login.LoginActivity
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class])
+@Component(modules = [AppModule::class, NetworkModule::class])
 interface AppComponent {
 
     companion object {
@@ -24,6 +24,8 @@ interface AppComponent {
 
         fun build(): AppComponent
     }
+
+    fun createUserComponentFactory(): UserComponent.Factory
 
     fun inject(baseApplication: BaseApplication)
     fun inject(activity: LoginActivity)
