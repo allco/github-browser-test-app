@@ -17,6 +17,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.internal.disposables.DisposableHelper
 import io.reactivex.internal.subscriptions.SubscriptionHelper
 import io.reactivex.internal.util.EndConsumerHelper
+import io.reactivex.subjects.SingleSubject
 import org.reactivestreams.Subscriber
 import org.reactivestreams.Subscription
 import timber.log.Timber
@@ -175,6 +176,13 @@ fun <T> Single<T>.subscribeSafely(observer: SingleEmitter<T>): Disposable {
     return subscribeWith(SafeObserver(getCallPlace(CALL_STACK_DEPTH), OnEvenHandler<T>().apply {
         onSuccess = observer::onSuccess
         onError = observer::onError
+    }))
+}
+
+fun <T> Single<T>.subscribeSafely(subject: SingleSubject<T>): Disposable {
+    return subscribeWith(SafeObserver(getCallPlace(CALL_STACK_DEPTH), OnEvenHandler<T>().apply {
+        onSuccess = subject::onSuccess
+        onError = subject::onError
     }))
 }
 

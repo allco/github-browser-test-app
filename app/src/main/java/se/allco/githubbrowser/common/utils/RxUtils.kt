@@ -4,9 +4,12 @@ import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
+import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 operator fun CompositeDisposable.plusAssign(disposable: Disposable?) {
     add(disposable ?: return)
@@ -27,3 +30,10 @@ inline fun <reified T> Single<Optional<T>>.filterOptional(): Maybe<T> =
 fun <T> ObservableEmitter<T>.onNextSafely(value: T?) {
     value?.takeIf { !isDisposed }?.also { onNext(it) }
 }
+
+fun <T> Observable<T>.delayIfNotNull(
+    timeMs: Long,
+    unit: TimeUnit = TimeUnit.MILLISECONDS,
+    scheduler: Scheduler = Schedulers.io()
+): Observable<T> =
+    timeMs.takeIf { it > 0 }?.let { delay(it, unit, scheduler) } ?: this

@@ -1,4 +1,4 @@
-package se.allco.githubbrowser.app.uicomponents.webview
+package se.allco.githubbrowser.common.ui.components
 
 import android.content.Context
 import android.net.Uri
@@ -21,9 +21,9 @@ interface WebViewComponentModel {
     val errorMessage: LiveData<String>
 
     enum class Result {
-        CONSUME_AND_FINISH,
-        CONSUME,
-        IGNORE
+        CONSUMED_FINISHING,
+        CONSUMED,
+        IGNORED
     }
 
     class Builder @Inject constructor(
@@ -34,9 +34,14 @@ interface WebViewComponentModel {
         var onChooseFile: ((FileChooserRequest) -> Maybe<Array<Uri>>)? = null
         var overrideLoading: ((uri: Uri) -> Result)? = null
 
-        fun build(url: String, scopedDisposable: CompositeDisposable): WebViewComponentModel =
+        fun build(
+            url: String,
+            headers: Map<String, String>,
+            scopedDisposable: CompositeDisposable
+        ): WebViewComponentModel =
             WebViewComponentModelImpl(
                 url = url,
+                headers = headers,
                 context = context,
                 networkState = networkState ?: networkReporterProvider.get().states(),
                 overrideLoading = overrideLoading,
