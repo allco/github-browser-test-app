@@ -8,7 +8,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
 import se.allco.githubbrowser.R
+import se.allco.githubbrowser.app.login.github.GithubLoginWebViewModel
 import se.allco.githubbrowser.app.user.GithubToken
+import se.allco.githubbrowser.app.user.User
 import se.allco.githubbrowser.common.ui.components.WebViewComponentModel
 import se.allco.githubbrowser.common.ui.delayedSpinner
 import se.allco.githubbrowser.common.utils.combineLiveData
@@ -22,25 +24,25 @@ import javax.inject.Inject
 class LoginActivityViewModel @Inject constructor(
     model: LoginModel,
     application: Application,
-    private val githubLoginWebView: GithubLoginWebViewModel
+    private val githubLoginModel: GithubLoginWebViewModel
 ) : AndroidViewModel(application) {
 
     private val disposables = CompositeDisposable()
 
-    // Indicates the logged in user. View has to finish it is not null.
-    val finished = MutableLiveData<Unit>()
+    // Indicates the "logged in" user. If it got any value the View has to finish.
+    val loggedInUser = MutableLiveData<User.Valid>()
 
     // Error message parameters
     val errorMessage = MutableLiveData<String>(null)
     val showError: LiveData<Boolean> = errorMessage.map { !it.isNullOrBlank() }
 
     // Loading spinner parameters
-    private val showLoadingInternal = MutableLiveData(false)
+    private val _showLoading = MutableLiveData(false)
     val showLoading =
-        combineLiveData(showError, showLoadingInternal, false)
+        combineLiveData(showError, _showLoading, false)
         { error, loading -> error != true && loading == true }
 
-    // GitHub login web page parameters
+    // WebView parameters
     val webComponentViewModel = MutableLiveData<WebViewComponentModel>(null)
     val showGithubLogin: LiveData<Boolean> =
         combineLiveData(showError, webComponentViewModel, false)
@@ -57,7 +59,7 @@ class LoginActivityViewModel @Inject constructor(
         disposables +=
             model
                 .loginUser()
-                .delayedSpinner(showLoadingInternal)
+                .delayedSpinner(_showLoading)
                 .doOnError(::onModelError)
                 .doOnNext(::onModelSignal)
                 .retryWhen { retrySubject }
@@ -71,14 +73,14 @@ class LoginActivityViewModel @Inject constructor(
 
     private fun onModelSignal(signal: LoginModel.Signal) {
         when (signal) {
-            is LoginModel.Signal.RunManualLogin -> onManualLogin(signal.callback)
-            LoginModel.Signal.Success -> finished.postValue(Unit)
+            is LoginModel.Signal.PerformManualLogin -> onManualLogin(signal.callback)
+            is LoginModel.Signal.Success -> loggedInUser.postValue(signal.user)
         }
     }
 
     private fun onManualLogin(callback: SingleSubject<GithubToken>) {
         webComponentViewModel.postValue(
-            githubLoginWebView.createWebViewModel(disposables, callback)
+            githubLoginModel.createWebViewModel(disposables, callback)
         )
     }
 

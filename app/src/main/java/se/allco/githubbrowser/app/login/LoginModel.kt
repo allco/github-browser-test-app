@@ -10,13 +10,18 @@ import se.allco.githubbrowser.common.utils.subscribeSafely
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * Implements business logic for the login procedure.
+ * It tries to read the token from the local storage first, and
+ * if it fails, it asks VM to launch UI for the manual login.
+ */
 class LoginModel @Inject constructor(
     private val repository: LoginRepository
 ) {
 
     sealed class Signal {
-        data class RunManualLogin(val callback: SingleSubject<GithubToken>) : Signal()
-        object Success : Signal()
+        data class PerformManualLogin(val callback: SingleSubject<GithubToken>) : Signal()
+        data class Success(val user: User.Valid) : Signal()
     }
 
     private val manualLoginTokenEmitter = SingleSubject.create<GithubToken>()
@@ -31,7 +36,7 @@ class LoginModel @Inject constructor(
 
     /**
      * @return stream of [Signal] where:
-     *  [Signal.RunManualLogin] - means the user has to log in manually
+     *  [Signal.PerformManualLogin] - means the user has to log in manually
      *      and the GitHub token needs to be delivered back with [Signal.RunManualLogin.callback].
      *  [Signal.Success] - means the user is logged in successfully.
      */
@@ -47,14 +52,14 @@ class LoginModel @Inject constructor(
                 .onErrorComplete()
                 .switchIfEmpty(
                     manualLogin.doOnSubscribe {
-                        emitter.onNext(Signal.RunManualLogin(manualLoginTokenEmitter))
+                        emitter.onNext(Signal.PerformManualLogin(manualLoginTokenEmitter))
                     }
                 )
                 .flatMapCompletable { user ->
                     repository.switchLoggedInUser(user)
                     repository
                         .writeCachedToken(user)
-                        .doOnComplete { emitter.onNext(Signal.Success) }
+                        .doOnComplete { emitter.onNext(Signal.Success(user)) }
                 }
                 .doOnError(emitter::onError)
                 .onErrorComplete()

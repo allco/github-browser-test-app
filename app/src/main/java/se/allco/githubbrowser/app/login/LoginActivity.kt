@@ -10,9 +10,11 @@ import androidx.core.app.TaskStackBuilder
 import androidx.databinding.DataBindingUtil
 import se.allco.githubbrowser.R
 import se.allco.githubbrowser.app.di.AppComponent
+import se.allco.githubbrowser.app.user.User
 import se.allco.githubbrowser.common.utils.ObserverNonNull
 import se.allco.githubbrowser.common.utils.getViewModel
 import se.allco.githubbrowser.databinding.ActivityLoginBinding
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -25,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
             intent.getParcelableExtra(ARG_CALLBACK)
 
         fun createIntent(activity: Activity): Intent {
-            // create an PendingIntent based on the same intent which the current Activity was started with.
+            // create an PendingIntent based on the same intent which `activity` was started with.
             val callback = TaskStackBuilder
                 .create(activity)
                 .addNextIntentWithParentStack(activity.intent)
@@ -52,10 +54,11 @@ class LoginActivity : AppCompatActivity() {
         binding.lifecycleOwner = this@LoginActivity
         binding.viewModel = viewModel
         webView = binding.include.webView
-        viewModel.finished.observe(this@LoginActivity, ObserverNonNull { onUserLoggedIn() })
+        viewModel.loggedInUser.observe(this@LoginActivity, ObserverNonNull(::onUserLoggedIn))
     }
 
-    private fun onUserLoggedIn() {
+    private fun onUserLoggedIn(@Suppress("UNUSED_PARAMETER") user: User.Valid) {
+        Timber.v("onUserLoggedIn() called  with: user = [$user]")
         readCallbackIntent(intent)?.send()
         finishAfterTransition()
     }

@@ -1,4 +1,4 @@
-package se.allco.githubbrowser.app.login
+package se.allco.githubbrowser.app.login.github
 
 import com.google.gson.annotations.SerializedName
 import io.reactivex.Single
