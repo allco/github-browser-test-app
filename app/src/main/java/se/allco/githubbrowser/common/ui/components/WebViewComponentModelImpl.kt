@@ -12,80 +12,89 @@ import se.allco.githubbrowser.R
 import se.allco.githubbrowser.common.ui.databinding.webview.FileChooserRequest
 import se.allco.githubbrowser.common.ui.databinding.webview.WebViewDestination
 import se.allco.githubbrowser.common.ui.databinding.webview.WebViewSettings
-import se.allco.githubbrowser.common.utils.asOptional
-import se.allco.githubbrowser.common.utils.combine
-import se.allco.githubbrowser.common.utils.distinctUntilChanged
-import se.allco.githubbrowser.common.utils.map
+import se.allco.githubbrowser.common.ui.delayedSpinner
+import se.allco.githubbrowser.common.utils.combineLiveData
 import se.allco.githubbrowser.common.utils.toLiveData
 import timber.log.Timber
 import toSingleLiveEvent
 
 class WebViewComponentModelImpl(
     url: String,
-    context: Context,
     headers: Map<String, String>,
     disposables: CompositeDisposable,
     networkState: Observable<Boolean>,
     onChooseFile: ((FileChooserRequest) -> Maybe<Array<Uri>>)?,
-    private val overrideLoading: ((url: Uri) -> WebViewComponentModel.Result)?
+    private val overrideLoading: ((url: Uri) -> WebViewComponentModel.Result)?,
+    private val context: Context
 ) : WebViewComponentModel {
 
-    sealed class State {
-        data class Error(@StringRes val res: Int = R.string.error_generic) : State()
-        data class Destination(val destination: WebViewDestination) : State()
-        object Loading : State()
-        object Finished : State()
+    private sealed class Signal {
+        data class Error(@StringRes val res: Int = R.string.error_generic) : Signal()
+        data class Destination(val destination: WebViewDestination) : Signal()
+        object LoadingFinished : Signal()
+        object Loading : Signal()
     }
 
     override val settings = WebViewSettings(
         useCache = false,
-        allowFileAccess = onChooseFile != null,
         onChooseFile = onChooseFile,
+        allowFileAccess = onChooseFile != null,
         overrideLoading = { url: String? ->
             url?.let { shouldOverrideLoadingUrl(Uri.parse(it)) }
                 ?: false.also { Timber.w("WebViewComponentModel: url is null") }
         }
     )
 
-    /**
-     * Emits `State.Error` and/or `State.Destination`
-     * Can emmit multiple `State.Error` before first `State.Destination`
-     * First it reads connectivity status.
-     * if its `true` then creates `State.Destination`, or `State.Error` otherwise.
-     * It completes after first emission of `State.Destination`
-     */
-    private val destinationState: Observable<State> =
-        networkState
-            .map { connectivity ->
-                when (connectivity) {
-                    true -> State.Destination(
-                        WebViewDestination(url, headers)
-                    )
-                    else -> State.Error(
-                        R.string.error_no_internet_connection
-                    )
-                }
-            }
-            .startWith(State.Loading)
-            .distinctUntilChanged()
-
-    /**
-     * Emits any kind of `State`
-     * In case of `Destination` it subscribes to states from WebView.
-     * all other state are just being passed further
-     */
-    private val state: Observable<State> =
-        destinationState
-            .switchMap { state ->
-                when (state) {
-                    is State.Destination -> settings.states.map { it.asState() }.startWith(state)
-                    else -> Observable.just(state)
-                }
-            }
-            .replay(1)
-            .refCount()
-
     private val aboutToFinish = MutableLiveData(false)
+    private val _showLoading = MutableLiveData<Boolean>(false)
+
+    override val destination: LiveData<WebViewDestination> =
+        // In case of `Destination` it subscribes to states from WebView.
+        networkState
+            .map { online ->
+                when (online) {
+                    true -> Signal.Destination(WebViewDestination(url, headers))
+                    else -> Signal.Error(R.string.error_no_internet_connection)
+                }
+            }
+            .distinctUntilChanged()
+            .switchMap { signal ->
+                when (signal) {
+                    is Signal.Destination -> settings.states.map { it.asSignal() }.startWith(signal)
+                    else -> Observable.just(signal)
+                }
+            }
+            .doOnNext(::renderState)
+            .ofType(Signal.Destination::class.java)
+            .delayedSpinner(_showLoading)
+            .map { it.destination }
+            .toLiveData(disposables)
+            .toSingleLiveEvent()
+
+    override val errorMessage = MutableLiveData<String>(null)
+    override val showContent = MutableLiveData<Boolean>(false)
+    override val showLoading = combineLiveData(_showLoading, aboutToFinish, false)
+    { loading, aboutToFinish -> loading == true || aboutToFinish == true }
+
+    private fun renderState(signal: Signal) {
+        when (signal) {
+            Signal.Loading -> {
+                showContent.postValue(false)
+                errorMessage.postValue(null)
+                _showLoading.postValue(false)
+            }
+            Signal.LoadingFinished -> {
+                showContent.postValue(true)
+                errorMessage.postValue(null)
+                _showLoading.postValue(false)
+            }
+            is Signal.Error -> {
+                showContent.postValue(false)
+                errorMessage.postValue(context.getString(signal.res))
+                _showLoading.postValue(false)
+            }
+        }
+    }
 
     private fun shouldOverrideLoadingUrl(uri: Uri): Boolean =
         when (overrideLoading?.invoke(uri) ?: WebViewComponentModel.Result.IGNORED) {
@@ -94,40 +103,11 @@ class WebViewComponentModelImpl(
             WebViewComponentModel.Result.IGNORED -> false
         }
 
-    override val destination: LiveData<WebViewDestination> =
-        state
-            .ofType(State.Destination::class.java)
-            .map { it.destination }
-            .toLiveData(disposables)
-            .toSingleLiveEvent()
-
-    override val showContent: LiveData<Boolean> =
-        state
-            .map { it is State.Finished }
-            .toLiveData(disposables)
-            .distinctUntilChanged()
-
-    override val showLoading: LiveData<Boolean> =
-        state
-            .map { it is State.Loading || it is State.Destination }
-            .distinctUntilChanged()
-            .toLiveData(disposables)
-            .combine(aboutToFinish, false) { pageIsLoading, finishing ->
-                pageIsLoading == true || finishing == true
-            }
-            .distinctUntilChanged()
-
-    override val errorMessage: LiveData<String> =
-        state
-            .map { cmd -> (cmd as? State.Error)?.let { context.getString(it.res) }.asOptional() }
-            .toLiveData(disposables)
-            .map { it?.asNullable() }
-            .distinctUntilChanged()
+    private fun WebViewSettings.State.asSignal(): Signal =
+        when (this) {
+            WebViewSettings.State.ERROR -> Signal.Error()
+            WebViewSettings.State.STARTED -> Signal.Loading
+            WebViewSettings.State.FINISHED -> Signal.LoadingFinished
+        }
 }
 
-private fun WebViewSettings.State.asState(): WebViewComponentModelImpl.State =
-    when (this) {
-        WebViewSettings.State.ERROR -> WebViewComponentModelImpl.State.Error()
-        WebViewSettings.State.STARTED -> WebViewComponentModelImpl.State.Loading
-        WebViewSettings.State.FINISHED -> WebViewComponentModelImpl.State.Finished
-    }

@@ -26,6 +26,7 @@ interface WebViewComponentModel {
         IGNORED
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     class Builder @Inject constructor(
         private val context: Context,
         private val networkReporterProvider: Provider<NetworkReporter>
