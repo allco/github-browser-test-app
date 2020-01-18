@@ -1,4 +1,4 @@
-package se.allco.githubbrowser.app
+package se.allco.githubbrowser.app.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

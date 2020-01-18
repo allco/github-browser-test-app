@@ -1,4 +1,4 @@
-package se.allco.githubbrowser.app.ui.home
+package se.allco.githubbrowser.app.main.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
