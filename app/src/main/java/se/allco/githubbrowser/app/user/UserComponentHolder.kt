@@ -1,7 +1,7 @@
-package se.allco.githubbrowser.app.di
+package se.allco.githubbrowser.app.user
 
 import io.reactivex.subjects.BehaviorSubject
-import se.allco.githubbrowser.app.user.User
+import se.allco.githubbrowser.app.di.AppComponent
 
 class UserComponentHolder(
     private val appComponent: AppComponent
