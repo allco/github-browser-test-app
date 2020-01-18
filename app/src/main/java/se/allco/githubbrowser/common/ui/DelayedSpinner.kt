@@ -63,7 +63,7 @@ fun <T> Observable<T>.delayedSpinner(
         )
 
         @Suppress("UnstableApiUsage")
-        this
+        disposables += this
             .materialize()
             .concatWith(Observable.never())
             .concatMap { notification ->
