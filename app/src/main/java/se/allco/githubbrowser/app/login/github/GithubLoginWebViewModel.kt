@@ -9,7 +9,6 @@ import se.allco.githubbrowser.common.ui.components.WebViewComponentModel
 import se.allco.githubbrowser.common.utils.plusAssign
 import se.allco.githubbrowser.common.utils.subscribeSafely
 import java.util.UUID
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class GithubLoginWebViewModel @Inject constructor(
@@ -51,7 +50,7 @@ class GithubLoginWebViewModel @Inject constructor(
         }
 
         private fun processCode(code: String) {
-            disposables += repository.fetchAccessToken(code).delay(3, TimeUnit.SECONDS).subscribeSafely(callback)
+            disposables += repository.fetchAccessToken(code).subscribeSafely(callback)
         }
 
         val onNavigateToUrl = { redirectUrl: Uri ->
