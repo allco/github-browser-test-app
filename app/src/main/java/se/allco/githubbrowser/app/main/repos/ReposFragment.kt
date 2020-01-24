@@ -1,4 +1,4 @@
-package se.allco.githubbrowser.app.main.ui.home
+package se.allco.githubbrowser.app.main.repos
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import se.allco.githubbrowser.R
 
-class HomeFragment : Fragment() {
+class ReposFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var reposViewModel: ReposViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        homeViewModel =
-            ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        reposViewModel =
+            ViewModelProviders.of(this).get(ReposViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val textView: TextView = root.findViewById(R.id.text_home)
-        homeViewModel.text.observe(this, Observer {
+        reposViewModel.text.observe(this, Observer {
             textView.text = it
         })
         return root
