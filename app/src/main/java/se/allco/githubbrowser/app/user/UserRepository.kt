@@ -8,7 +8,7 @@ import javax.inject.Singleton
 @Singleton
 class UserRepository @Inject constructor() {
 
-    private val userSubject = BehaviorSubject.createDefault<User>(User.Invalid)
+    private val userSubject = BehaviorSubject.createDefault<User>(User.Invalid).toSerialized()
 
     fun switchUser(user: User) {
         userSubject.onNext(user)
@@ -19,4 +19,6 @@ class UserRepository @Inject constructor() {
     }
 
     val userFeed: Observable<User> = userSubject
+
+    fun getCurrentUser(): User = userSubject.blockingFirst()
 }

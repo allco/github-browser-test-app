@@ -6,6 +6,7 @@ import dagger.BindsInstance
 import dagger.Component
 import se.allco.githubbrowser.app.BaseApplication
 import se.allco.githubbrowser.app.login.LoginActivity
+import se.allco.githubbrowser.app.main.MainActivity
 import javax.inject.Singleton
 
 @Singleton
@@ -29,4 +30,5 @@ interface AppComponent {
 
     fun inject(baseApplication: BaseApplication)
     fun inject(activity: LoginActivity)
+    fun inject(mainActivity: MainActivity)
 }

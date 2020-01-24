@@ -1,6 +1,7 @@
 package se.allco.githubbrowser.app.user
 
 import androidx.lifecycle.ProcessLifecycleOwner
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
 import io.reactivex.disposables.SerialDisposable
 import se.allco.githubbrowser.app.di.AppComponent
@@ -24,6 +25,7 @@ class UserComponentHolder(
                 disposables.set(
                     userRepository
                         .userFeed
+                        .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(::onUserChanged)
                         .subscribeSafely()
                 )
