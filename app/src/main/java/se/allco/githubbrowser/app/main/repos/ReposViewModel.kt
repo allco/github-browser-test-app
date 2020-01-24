@@ -1,13 +1,8 @@
 package se.allco.githubbrowser.app.main.repos
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import se.allco.githubbrowser.common.ui.recyclerview.DataBoundAdapter
 
 class ReposViewModel : ViewModel() {
-
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
-    val text: LiveData<String> = _text
+    val listItems: List<DataBoundAdapter.Item> = emptyList()
 }

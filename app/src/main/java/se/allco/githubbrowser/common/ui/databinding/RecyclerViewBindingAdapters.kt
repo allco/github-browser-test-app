@@ -16,10 +16,7 @@ fun <T : RecyclerView.Adapter<*>> setRecycleViewAdapter(recyclerView: RecyclerVi
 }
 
 @BindingAdapter("listItems")
-fun setRecyclerViewListItems(
-    recyclerView: RecyclerView,
-    listItems: List<DataBoundAdapter.Item>?
-) {
+fun setRecyclerViewListItems(recyclerView: RecyclerView, listItems: List<DataBoundAdapter.Item>?) {
     listItems?.let {
         when (val adapter = recyclerView.adapter) {
             null -> recyclerView.adapter = DataBoundAdapter(listItems)

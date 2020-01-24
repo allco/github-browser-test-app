@@ -11,7 +11,7 @@
         android:id="@+id/navigation_repos"
         android:name="se.allco.githubbrowser.app.main.repos.ReposFragment"
         android:label="@string/title_repos"
-        tools:layout="@layout/fragment_home"
+        tools:layout="@layout/fragment_repos"
         />
 
 </navigation>
