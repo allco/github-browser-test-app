@@ -10,8 +10,23 @@ import se.allco.githubbrowser.BR
 class DataBoundAdapter(items: List<Item>?) : BaseAdapter<ViewDataBinding>() {
 
     interface Item {
+        /**
+         * The same as [androidx.recyclerview.widget.DiffUtil.Callback.areItemsTheSame]
+         * If two items are NOT the same, then Moving/Insertion animation can be triggered at
+         * [androidx.recyclerview.widget.RecyclerView.ItemAnimator]
+         */
         fun areItemsTheSame(item: Item): Boolean
+
+        /**
+         * The same as [androidx.recyclerview.widget.DiffUtil.Callback.areContentsTheSame]
+         * If two items ARE the same, then Update animation can be triggered at
+         * [androidx.recyclerview.widget.RecyclerView.ItemAnimator].
+         */
         fun areContentsTheSame(item: Item): Boolean
+
+        /**
+         * @return resource Id for the item's layout
+         */
         @LayoutRes
         fun getLayoutId(): Int
     }
