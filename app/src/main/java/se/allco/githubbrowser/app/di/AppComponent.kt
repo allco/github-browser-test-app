@@ -25,7 +25,7 @@ interface AppComponent {
         fun build(): AppComponent
     }
 
-    fun createUserComponentFactory(): UserComponent.Factory
+    fun getUserComponentFactory(): UserComponent.Factory
 
     fun inject(baseApplication: BaseApplication)
     fun inject(activity: LoginActivity)
