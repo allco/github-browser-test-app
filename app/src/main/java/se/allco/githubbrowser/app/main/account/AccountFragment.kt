@@ -17,6 +17,7 @@ class AccountFragment @Inject constructor(
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         FragmentAccountBinding.inflate(inflater, container, false)
             .also {
+                it.lifecycleOwner = viewLifecycleOwner
                 it.viewModel = getViewModel(accountViewModelProvider)
             }
             .root
