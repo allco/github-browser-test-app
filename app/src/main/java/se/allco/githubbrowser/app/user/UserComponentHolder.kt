@@ -6,7 +6,6 @@ import io.reactivex.disposables.Disposables
 import io.reactivex.disposables.SerialDisposable
 import se.allco.githubbrowser.app.di.AppComponent
 import se.allco.githubbrowser.app.di.AppModule
-import se.allco.githubbrowser.app.di.UserComponent
 import se.allco.githubbrowser.common.utils.attachLifecycleEventsObserver
 import se.allco.githubbrowser.common.utils.subscribeSafely
 import javax.inject.Named

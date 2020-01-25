@@ -7,10 +7,11 @@ import dagger.Component
 import se.allco.githubbrowser.app.BaseApplication
 import se.allco.githubbrowser.app.login.LoginActivity
 import se.allco.githubbrowser.app.main.MainActivity
+import se.allco.githubbrowser.app.user.UserComponent
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class, NetworkModule::class])
+@Component(modules = [AppModule::class])
 interface AppComponent {
 
     companion object {

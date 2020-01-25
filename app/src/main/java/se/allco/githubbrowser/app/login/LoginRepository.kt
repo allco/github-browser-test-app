@@ -4,6 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @JvmSuppressWildcards
 class LoginRepository @Inject constructor(
-    private val retrofitFactory: (baseUrl: String) -> Retrofit,
+    private val retrofitBuilder: Retrofit.Builder,
+    private val okHttpBuilder: OkHttpClient.Builder,
     private val userRepository: UserRepository,
     private val tokenCache: TokenCache
 ) {
@@ -28,7 +30,10 @@ class LoginRepository @Inject constructor(
     }
 
     fun fetchGithubUser(token: GithubToken): Single<User.Valid> =
-        retrofitFactory(BuildConfig.GITHUB_API_BASE_URL)
+        retrofitBuilder
+            .client(okHttpBuilder.build())
+            .baseUrl(BuildConfig.GITHUB_API_BASE_URL)
+            .build()
             .create(GetCurrentUserInfo::class.java)
             .call(token.asAuthHeader())
             .subscribeOn(Schedulers.io())

@@ -10,6 +10,7 @@ import androidx.core.app.TaskStackBuilder
 import androidx.databinding.DataBindingUtil
 import se.allco.githubbrowser.R
 import se.allco.githubbrowser.app.di.AppComponent
+import se.allco.githubbrowser.app.main.MainActivity
 import se.allco.githubbrowser.app.user.User
 import se.allco.githubbrowser.common.utils.ObserverNonNull
 import se.allco.githubbrowser.common.utils.getViewModel
@@ -59,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun onUserLoggedIn(@Suppress("UNUSED_PARAMETER") user: User.Valid) {
         Timber.v("onUserLoggedIn() called  with: user = [$user]")
-        readCallbackIntent(intent)?.send()
+        readCallbackIntent(intent)?.send() ?: startActivity(Intent(this, MainActivity::class.java))
         finishAfterTransition()
     }
 

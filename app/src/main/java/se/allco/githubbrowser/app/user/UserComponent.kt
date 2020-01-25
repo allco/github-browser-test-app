@@ -1,8 +1,7 @@
-package se.allco.githubbrowser.app.di
+package se.allco.githubbrowser.app.user
 
 import dagger.BindsInstance
 import dagger.Subcomponent
-import se.allco.githubbrowser.app.user.User
 
 @Subcomponent
 interface UserComponent {
