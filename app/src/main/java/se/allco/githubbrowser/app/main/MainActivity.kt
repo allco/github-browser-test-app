@@ -9,8 +9,11 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import se.allco.githubbrowser.R
 import se.allco.githubbrowser.app.di.AppComponent
+import se.allco.githubbrowser.app.main.di.MainComponent
+import se.allco.githubbrowser.app.user.UserComponentHolder
 import se.allco.githubbrowser.app.user.UserRepository
 import se.allco.githubbrowser.app.utils.ensureUserLoggedIn
+import se.allco.githubbrowser.common.utils.getViewModel
 import se.allco.githubbrowser.databinding.ActivityMainBinding
 import javax.inject.Inject
 
@@ -19,8 +22,12 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var userRepository: UserRepository
 
+    @Inject
+    lateinit var userComponentHolder: UserComponentHolder
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AppComponent.getInstance(this).inject(this)
+        supportFragmentManager.fragmentFactory = getMainComponent().getFragmentFactory()
         super.onCreate(savedInstanceState)
         ensureUserLoggedIn(userRepository) {
             val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
@@ -31,5 +38,11 @@ class MainActivity : AppCompatActivity() {
             setupActionBarWithNavController(navController, appBarConfiguration)
             binding.navView.setupWithNavController(navController)
         }
+    }
+
+    private fun getMainComponent(): MainComponent = getViewModel {
+        userComponentHolder
+            .getUserComponent()
+            .createMainComponent()
     }
 }
