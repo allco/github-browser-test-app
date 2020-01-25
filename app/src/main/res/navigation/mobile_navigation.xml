@@ -14,4 +14,12 @@
         tools:layout="@layout/fragment_repos"
         />
 
+
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="se.allco.githubbrowser.app.main.account.AccountFragment"
+        android:label="@string/title_account"
+        tools:layout="@layout/fragment_account"
+        />
+
 </navigation>

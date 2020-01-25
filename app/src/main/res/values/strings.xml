@@ -1,10 +1,16 @@
 <resources>
     <string name="app_name">GithubBrowser</string>
     <string name="title_repos">Repositories</string>
+    <string name="title_account">Account</string>
 
     <string name="login_activity_title">Login</string>
 
     <string name="error_generic">Something went wrong. Try again later.</string>
     <string name="error_no_internet_connection">There is no internet connection</string>
     <string name="button_retry">Retry</string>
+
+
+    <string name="main_account_button_logout">Logout</string>
+
+
 </resources>

@@ -5,6 +5,7 @@ typealias GithubToken = String
 sealed class User {
     data class Valid(
         val userId: String,
+        val userName: String,
         val token: GithubToken
     ) : User()
 

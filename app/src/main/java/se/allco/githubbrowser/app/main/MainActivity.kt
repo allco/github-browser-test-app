@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
             val navController = findNavController(R.id.nav_host_fragment)
             val appBarConfiguration = AppBarConfiguration(
-                setOf(R.id.navigation_repos)
+                setOf(R.id.navigation_repos, R.id.navigation_account)
             )
             setupActionBarWithNavController(navController, appBarConfiguration)
             binding.navView.setupWithNavController(navController)
