@@ -4,7 +4,7 @@ import dagger.BindsInstance
 import dagger.Subcomponent
 import se.allco.githubbrowser.app.main.di.MainComponent
 
-@Subcomponent
+@Subcomponent(modules = [UserModule::class])
 interface UserComponent {
     @Subcomponent.Factory
     interface Factory {
