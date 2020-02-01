@@ -12,14 +12,14 @@ import se.allco.githubbrowser.BuildConfig
 import se.allco.githubbrowser.app.user.GithubToken
 import se.allco.githubbrowser.app.user.TokenCache
 import se.allco.githubbrowser.app.user.User
-import se.allco.githubbrowser.app.user.UserRepository
+import se.allco.githubbrowser.app.user.UserModel
 import javax.inject.Inject
 
 @JvmSuppressWildcards
 class LoginRepository @Inject constructor(
     private val retrofitBuilder: Retrofit.Builder,
     private val okHttpBuilder: OkHttpClient.Builder,
-    private val userRepository: UserRepository,
+    private val userModel: UserModel,
     private val tokenCache: TokenCache
 ) {
 
@@ -47,7 +47,7 @@ class LoginRepository @Inject constructor(
         tokenCache.write(user)
 
     fun switchLoggedInUser(user: User.Valid) {
-        userRepository.switchUser(user)
+        userModel.switchUser(user)
     }
 }
 

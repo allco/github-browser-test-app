@@ -9,7 +9,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UserRepository @Inject constructor(
+class UserModel @Inject constructor(
     private val tokenCache: TokenCache
 ) {
 

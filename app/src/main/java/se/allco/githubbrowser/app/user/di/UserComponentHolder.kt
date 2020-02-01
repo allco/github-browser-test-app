@@ -7,7 +7,7 @@ import io.reactivex.disposables.SerialDisposable
 import se.allco.githubbrowser.app.di.AppComponent
 import se.allco.githubbrowser.app.di.AppModule
 import se.allco.githubbrowser.app.user.User
-import se.allco.githubbrowser.app.user.UserRepository
+import se.allco.githubbrowser.app.user.UserModel
 import se.allco.githubbrowser.common.utils.attachLifecycleEventsObserver
 import se.allco.githubbrowser.common.utils.subscribeSafely
 import javax.inject.Inject
@@ -17,7 +17,7 @@ import javax.inject.Singleton
 @Singleton
 class UserComponentHolder @Inject constructor(
     private val appComponent: AppComponent,
-    private val userRepository: UserRepository,
+    private val userModel: UserModel,
     @Named(AppModule.PROCESS_LIFECYCLE_OWNER) processLifecycleOwner: LifecycleOwner
 ) {
 
@@ -26,7 +26,7 @@ class UserComponentHolder @Inject constructor(
         processLifecycleOwner.lifecycle.attachLifecycleEventsObserver {
             onStarted = {
                 disposables.set(
-                    userRepository
+                    userModel
                         .userFeed
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(::onUserChanged)

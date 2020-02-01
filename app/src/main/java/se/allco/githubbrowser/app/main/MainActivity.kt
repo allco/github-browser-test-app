@@ -10,7 +10,7 @@ import androidx.navigation.ui.setupWithNavController
 import se.allco.githubbrowser.R
 import se.allco.githubbrowser.app.di.AppComponent
 import se.allco.githubbrowser.app.main.di.MainComponent
-import se.allco.githubbrowser.app.user.UserRepository
+import se.allco.githubbrowser.app.user.UserModel
 import se.allco.githubbrowser.app.user.di.UserComponentHolder
 import se.allco.githubbrowser.app.utils.ensureUserLoggedIn
 import se.allco.githubbrowser.common.utils.getViewModel
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var userRepository: UserRepository
+    lateinit var userModel: UserModel
 
     @Inject
     lateinit var userComponentHolder: UserComponentHolder
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         AppComponent.getInstance(this).inject(this)
         supportFragmentManager.fragmentFactory = getMainComponent().getFragmentFactory()
         super.onCreate(savedInstanceState)
-        ensureUserLoggedIn(userRepository) {
+        ensureUserLoggedIn(userModel) {
             val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
             val navController = findNavController(R.id.nav_host_fragment)
             val appBarConfiguration = AppBarConfiguration(

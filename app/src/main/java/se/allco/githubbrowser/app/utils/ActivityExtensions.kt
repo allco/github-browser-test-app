@@ -6,11 +6,11 @@ import io.reactivex.disposables.Disposables
 import io.reactivex.disposables.SerialDisposable
 import se.allco.githubbrowser.app.login.LoginActivity
 import se.allco.githubbrowser.app.user.User
-import se.allco.githubbrowser.app.user.UserRepository
+import se.allco.githubbrowser.app.user.UserModel
 import se.allco.githubbrowser.common.utils.attachLifecycleEventsObserver
 import se.allco.githubbrowser.common.utils.subscribeSafely
 
-fun FragmentActivity.ensureUserLoggedIn(userRepository: UserRepository, onValidUser: () -> Unit) {
+fun FragmentActivity.ensureUserLoggedIn(userModel: UserModel, onValidUser: () -> Unit) {
 
     fun onUser(user: User, callback: (() -> Unit)? = null) {
         when (user) {
@@ -26,7 +26,7 @@ fun FragmentActivity.ensureUserLoggedIn(userRepository: UserRepository, onValidU
     lifecycle.attachLifecycleEventsObserver {
         onResumed = {
             disposables.set(
-                userRepository
+                userModel
                     .userFeed
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnNext { onUser(it) }
@@ -38,6 +38,6 @@ fun FragmentActivity.ensureUserLoggedIn(userRepository: UserRepository, onValidU
         }
     }
 
-    onUser(userRepository.getCurrentUser(), onValidUser)
+    onUser(userModel.getCurrentUser(), onValidUser)
 }
 
