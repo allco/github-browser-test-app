@@ -1,4 +1,4 @@
-package se.allco.githubbrowser.app.utils
+package se.allco.githubbrowser.common.ui
 
 import androidx.fragment.app.FragmentActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
