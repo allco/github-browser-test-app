@@ -1,3 +1,4 @@
+package se.allco.githubbrowser.common.ui
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LifecycleOwner

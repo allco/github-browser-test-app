@@ -1,12 +1,12 @@
 package se.allco.githubbrowser.common.utils
 
 /**
- * Utility class for sending nullables through the Rx emitters (onNext takes only non-null)
+ * Implements the same idea as [java.util.Optional] which is available only starting API24
  */
 sealed class Optional<out T> {
     data class Some<out T>(val element: T) : Optional<T>()
     object None : Optional<Nothing>() {
-        override fun toString(): String = "Optional.None " + super.toString()
+        override fun toString(): String = "Optional.None"
     }
 
     companion object {
