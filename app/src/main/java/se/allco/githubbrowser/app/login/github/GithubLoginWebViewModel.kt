@@ -15,7 +15,6 @@ class GithubLoginWebViewModel @Inject constructor(
     private val repository: GithubLoginWebRepository,
     private val webViewComponentViewModelBuilder: WebViewComponentModel.Builder
 ) {
-
     private fun createdUri(requestId: String) =
         Uri.Builder().apply {
             scheme("https")
@@ -70,7 +69,11 @@ class GithubLoginWebViewModel @Inject constructor(
     ): WebViewComponentModel =
         UUID.randomUUID().toString().let { requestId ->
             webViewComponentViewModelBuilder
-                .apply { overrideLoading = UrlNavigationHandler(requestId, disposables, callback).onNavigateToUrl }
+                .apply {
+                    useCache = false
+                    javaScriptEnabled = true
+                    overrideLoading = UrlNavigationHandler(requestId, disposables, callback).onNavigateToUrl
+                }
                 .build(
                     createdUri(requestId),
                     mapOf("Accept" to "application/vnd.github.machine-man-preview+json"),

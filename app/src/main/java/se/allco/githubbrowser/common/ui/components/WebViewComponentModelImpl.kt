@@ -13,13 +13,15 @@ import se.allco.githubbrowser.common.ui.databinding.webview.FileChooserRequest
 import se.allco.githubbrowser.common.ui.databinding.webview.WebViewDestination
 import se.allco.githubbrowser.common.ui.databinding.webview.WebViewSettings
 import se.allco.githubbrowser.common.ui.delayedSpinner
+import se.allco.githubbrowser.common.ui.toSingleLiveEvent
 import se.allco.githubbrowser.common.utils.combineLiveData
 import se.allco.githubbrowser.common.utils.toLiveData
 import timber.log.Timber
-import toSingleLiveEvent
 
 class WebViewComponentModelImpl(
     url: String,
+    useCache: Boolean,
+    javaScriptEnabled: Boolean,
     headers: Map<String, String>,
     disposables: CompositeDisposable,
     networkState: Observable<Boolean>,
@@ -36,9 +38,10 @@ class WebViewComponentModelImpl(
     }
 
     override val settings = WebViewSettings(
-        useCache = false,
+        useCache = useCache,
         onChooseFile = onChooseFile,
         allowFileAccess = onChooseFile != null,
+        javaScriptEnabled = javaScriptEnabled,
         overrideLoading = { url: String? ->
             url?.let { shouldOverrideLoadingUrl(Uri.parse(it)) }
                 ?: false.also { Timber.w("WebViewComponentModel: url is null") }

@@ -25,10 +25,10 @@ data class FileChooserRequest(
 class WebViewSettings(
     val overrideLoading: (String?) -> Boolean,
     val useCache: Boolean,
-    val javaScriptEnabled: Boolean = true,
-    val domStorageEnabled: Boolean = true,
-    val allowContentAccess: Boolean = true,
-    val geolocationEnabled: Boolean = true,
+    val javaScriptEnabled: Boolean = false,
+    val domStorageEnabled: Boolean = false,
+    val allowContentAccess: Boolean = false,
+    val geolocationEnabled: Boolean = false,
     val allowFileAccess: Boolean = false,
     val zoomEnabled: Boolean = false,
     val onChooseFile: ((FileChooserRequest) -> Maybe<Array<Uri>>)? = null

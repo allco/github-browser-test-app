@@ -34,6 +34,8 @@ interface WebViewComponentModel {
         var networkState: Observable<Boolean>? = null
         var onChooseFile: ((FileChooserRequest) -> Maybe<Array<Uri>>)? = null
         var overrideLoading: ((uri: Uri) -> Result)? = null
+        var javaScriptEnabled = false
+        var useCache = false
 
         fun build(
             url: String,
@@ -44,6 +46,8 @@ interface WebViewComponentModel {
                 url = url,
                 headers = headers,
                 context = context,
+                useCache = useCache,
+                javaScriptEnabled = javaScriptEnabled,
                 networkState = networkState ?: networkReporterProvider.get().states(),
                 overrideLoading = overrideLoading,
                 onChooseFile = onChooseFile,
