@@ -10,6 +10,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import se.allco.githubbrowser.BuildConfig
 import se.allco.githubbrowser.app.user.GithubToken
+import se.allco.githubbrowser.app.user.TokenCache
 import se.allco.githubbrowser.app.user.User
 import se.allco.githubbrowser.app.user.UserRepository
 import javax.inject.Inject
@@ -23,7 +24,7 @@ class LoginRepository @Inject constructor(
 ) {
 
     interface GetCurrentUserInfo {
-        data class Response(val id: String)
+        data class Response(val id: String, val name: String?, val login: String)
 
         @GET("/user")
         fun call(@Header("Authorization") authHeader: String): Single<Response>
@@ -37,7 +38,7 @@ class LoginRepository @Inject constructor(
             .create(GetCurrentUserInfo::class.java)
             .call(token.asAuthHeader())
             .subscribeOn(Schedulers.io())
-            .map { User.Valid(token = token, userId = it.id) }
+            .map { User.Valid(token = token, userId = it.id, userName = it.name ?: it.login) }
 
     fun readCachedToken(): Maybe<GithubToken> =
         tokenCache.read()

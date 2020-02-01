@@ -1,14 +1,22 @@
-package se.allco.githubbrowser.app.login
+package se.allco.githubbrowser.app.user
 
 import android.content.SharedPreferences
 import com.google.gson.GsonBuilder
 import io.reactivex.Completable
 import io.reactivex.Maybe
-import se.allco.githubbrowser.app.user.GithubToken
-import se.allco.githubbrowser.app.user.User
 import javax.inject.Inject
 import javax.inject.Provider
+import javax.inject.Singleton
 
+/**
+ * The Github token storage.
+ * Uses SharedPreferences under hood.
+ * All the methods return reactive streams which is not necessary for the current implementation since all the actions
+ * are pretty quick and can be be invoked synchronously. But I think it is better to have it like this since it makes
+ * the app ready for using asynchronous storage (other then SharedPreferences) under hood here later in future.
+ */
+
+@Singleton
 class TokenCache @Inject constructor(
     private val prefs: SharedPreferences,
     private val gsonBuilderProvider: Provider<GsonBuilder>
@@ -36,4 +44,8 @@ class TokenCache @Inject constructor(
         Completable.fromAction {
             prefs.edit().apply { putString(KEY, gsonBuilderProvider.get().create().toJson(user.token)) }.apply()
         }
+
+    fun erase(): Completable = Completable.fromAction {
+        prefs.edit().apply { remove(KEY) }.apply()
+    }
 }
