@@ -2,6 +2,7 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     >
 
@@ -14,13 +15,13 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
 
         <TextView
-            android:id="@+id/tv_user_name"
+            android:id="@+id/textUserName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -34,16 +35,55 @@
             />
 
         <Button
-            android:id="@+id/bt_logout"
+            android:id="@+id/buttonLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:onClick="@{() -> viewModel.onLogout()}"
             android:text="@string/main_account_button_logout"
-            app:layout_constraintStart_toStartOf="@+id/tv_user_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_user_name"
+            app:layout_constraintStart_toStartOf="@+id/textUserName"
+            app:layout_constraintTop_toBottomOf="@+id/textUserName"
             tools:layout_editor_absoluteX="16dp"
             />
+
+        <TextView
+            android:id="@+id/textError"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@tools:sample/lorem/random[9]"
+            android:text="@{viewModel.errorMessage}"
+            bind:goneUnless="@{viewModel.showError}"
+            />
+
+
+        <ProgressBar
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:goneUnless="@{viewModel.showLoading}"
+            />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/contentGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="buttonLogout,textUserName"
+            bind:goneUnless="@{viewModel.showContent}"
+            />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
