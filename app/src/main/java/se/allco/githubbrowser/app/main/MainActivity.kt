@@ -10,8 +10,8 @@ import androidx.navigation.ui.setupWithNavController
 import se.allco.githubbrowser.R
 import se.allco.githubbrowser.app.di.AppComponent
 import se.allco.githubbrowser.app.main.di.MainComponent
-import se.allco.githubbrowser.app.user.UserComponentHolder
 import se.allco.githubbrowser.app.user.UserRepository
+import se.allco.githubbrowser.app.user.di.UserComponentHolder
 import se.allco.githubbrowser.app.utils.ensureUserLoggedIn
 import se.allco.githubbrowser.common.utils.getViewModel
 import se.allco.githubbrowser.databinding.ActivityMainBinding

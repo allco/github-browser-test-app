@@ -7,7 +7,7 @@ import dagger.Component
 import se.allco.githubbrowser.app.BaseApplication
 import se.allco.githubbrowser.app.login.LoginActivity
 import se.allco.githubbrowser.app.main.MainActivity
-import se.allco.githubbrowser.app.user.UserComponent
+import se.allco.githubbrowser.app.user.di.UserComponent
 import javax.inject.Singleton
 
 @Singleton
