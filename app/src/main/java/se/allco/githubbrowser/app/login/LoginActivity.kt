@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
+import android.view.Window
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.TaskStackBuilder
@@ -50,12 +51,16 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         AppComponent.getInstance(this).inject(this)
         super.onCreate(savedInstanceState)
+        window.requestFeature(Window.FEATURE_ACTION_BAR)
+        supportActionBar!!.hide()
+
         val viewModel = getViewModel(viewModelProvider)
         val binding = DataBindingUtil.setContentView<ActivityLoginBinding>(this, R.layout.activity_login)
         binding.lifecycleOwner = this@LoginActivity
         binding.viewModel = viewModel
         webView = binding.include.webView
         viewModel.loggedInUser.observe(this@LoginActivity, ObserverNonNull(::onUserLoggedIn))
+        viewModel.showActionBar.observe(this@LoginActivity, ObserverNonNull { supportActionBar!!.show() })
     }
 
     private fun onUserLoggedIn(@Suppress("UNUSED_PARAMETER") user: User.Valid) {

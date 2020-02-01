@@ -44,6 +44,7 @@ class LoginActivityViewModel @Inject constructor(
 
     // WebView parameters
     val webComponentViewModel = MutableLiveData<WebViewComponentModel>(null)
+    val showActionBar: LiveData<Boolean> = webComponentViewModel.map { it != null }
     val showGithubLogin: LiveData<Boolean> =
         combineLiveData(showError, webComponentViewModel, false)
         { error, model -> error != true && model != null }
