@@ -69,8 +69,8 @@ class LoginActivity : AppCompatActivity() {
         binding.lifecycleOwner = this@LoginActivity
         binding.viewModel = viewModel
         webView = binding.include.webView
-        viewModel.loggedInUser.observe(this@LoginActivity, ObserverNonNull(::onUserLoggedIn))
         viewModel.showActionBar.observe(this@LoginActivity, ObserverNonNull { supportActionBar!!.show() })
+        viewModel.loggedInUser.observe(this@LoginActivity, ObserverNonNull(::onUserLoggedIn))
     }
 
     private fun onUserLoggedIn(@Suppress("UNUSED_PARAMETER") user: User.Valid) {

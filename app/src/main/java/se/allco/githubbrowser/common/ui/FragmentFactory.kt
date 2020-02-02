@@ -1,4 +1,4 @@
-package se.allco.githubbrowser.common
+package se.allco.githubbrowser.common.ui
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory

@@ -3,7 +3,7 @@ package se.allco.githubbrowser.app.login.di
 import androidx.lifecycle.ViewModel
 import dagger.Subcomponent
 import se.allco.githubbrowser.app.login.LoginActivity
-import se.allco.githubbrowser.common.FragmentFactory
+import se.allco.githubbrowser.common.ui.FragmentFactory
 
 @Subcomponent(modules = [LoginFragmentsModule::class])
 abstract class LoginComponent : ViewModel() {

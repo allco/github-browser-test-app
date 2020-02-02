@@ -6,7 +6,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import se.allco.githubbrowser.app.main.account.AccountFragment
 import se.allco.githubbrowser.app.main.repos.ReposFragment
-import se.allco.githubbrowser.common.FragmentKey
+import se.allco.githubbrowser.common.ui.FragmentKey
 
 @Module
 abstract class MainFragmentsModule {

@@ -3,7 +3,7 @@ package se.allco.githubbrowser.app.main.di
 import androidx.lifecycle.ViewModel
 import dagger.Subcomponent
 import se.allco.githubbrowser.app.main.MainActivity
-import se.allco.githubbrowser.common.FragmentFactory
+import se.allco.githubbrowser.common.ui.FragmentFactory
 import javax.inject.Scope
 
 @Scope
