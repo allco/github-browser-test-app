@@ -14,7 +14,7 @@ import se.allco.githubbrowser.app.user.UserModel
 import se.allco.githubbrowser.app.user.di.UserComponentHolder
 import se.allco.githubbrowser.common.ui.ensureUserLoggedIn
 import se.allco.githubbrowser.common.utils.getViewModel
-import se.allco.githubbrowser.databinding.ActivityMainBinding
+import se.allco.githubbrowser.databinding.MainActiviyBinding
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.fragmentFactory = getMainComponent().getFragmentFactory()
         super.onCreate(savedInstanceState)
         ensureUserLoggedIn(userModel) {
-            val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+            val binding = DataBindingUtil.setContentView<MainActiviyBinding>(this, R.layout.main_activiy)
             val navController = findNavController(R.id.nav_host_fragment)
             val appBarConfiguration = AppBarConfiguration(
                 setOf(R.id.navigation_repos, R.id.navigation_account)

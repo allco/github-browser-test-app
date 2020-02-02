@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import se.allco.githubbrowser.databinding.FragmentReposBinding
+import se.allco.githubbrowser.databinding.MainReposFragmentBinding
 import javax.inject.Inject
 
 class ReposFragment @Inject constructor() : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        FragmentReposBinding.inflate(inflater, container, false).root
+        MainReposFragmentBinding.inflate(inflater, container, false).root
 }

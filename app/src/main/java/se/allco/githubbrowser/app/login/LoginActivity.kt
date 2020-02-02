@@ -15,7 +15,7 @@ import se.allco.githubbrowser.app.main.MainActivity
 import se.allco.githubbrowser.app.user.User
 import se.allco.githubbrowser.common.utils.ObserverNonNull
 import se.allco.githubbrowser.common.utils.getViewModel
-import se.allco.githubbrowser.databinding.ActivityLoginBinding
+import se.allco.githubbrowser.databinding.LoginActivityBinding
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Provider
@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar!!.hide()
 
         val viewModel = getViewModel(viewModelProvider)
-        val binding = DataBindingUtil.setContentView<ActivityLoginBinding>(this, R.layout.activity_login)
+        val binding = DataBindingUtil.setContentView<LoginActivityBinding>(this, R.layout.login_activity)
         binding.lifecycleOwner = this@LoginActivity
         binding.viewModel = viewModel
         webView = binding.include.webView

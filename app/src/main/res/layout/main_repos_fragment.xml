@@ -22,7 +22,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         bind:listItems="@{viewModel.listItems}"
         tools:itemCount="4"
-        tools:listitem="@layout/fragment_repos_item"
+        tools:listitem="@layout/main_repos_item_fragment"
         />
 
 </layout>

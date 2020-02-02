@@ -11,7 +11,7 @@
         android:id="@+id/navigation_repos"
         android:name="se.allco.githubbrowser.app.main.repos.ReposFragment"
         android:label="@string/title_repos"
-        tools:layout="@layout/fragment_repos"
+        tools:layout="@layout/main_repos_fragment"
         />
 
 
@@ -19,7 +19,7 @@
         android:id="@+id/navigation_account"
         android:name="se.allco.githubbrowser.app.main.account.AccountFragment"
         android:label="@string/title_account"
-        tools:layout="@layout/fragment_account"
+        tools:layout="@layout/main_account_fragment"
         />
 
 </navigation>
