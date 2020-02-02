@@ -11,6 +11,7 @@ import androidx.core.app.TaskStackBuilder
 import androidx.databinding.DataBindingUtil
 import se.allco.githubbrowser.R
 import se.allco.githubbrowser.app.di.AppComponent
+import se.allco.githubbrowser.app.login.di.LoginComponent
 import se.allco.githubbrowser.app.main.MainActivity
 import se.allco.githubbrowser.app.user.User
 import se.allco.githubbrowser.common.utils.ObserverNonNull
@@ -49,11 +50,20 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var webView: WebView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AppComponent.getInstance(this).inject(this)
+        inject()
         super.onCreate(savedInstanceState)
+        initViews()
+    }
+
+    fun inject() {
+        val component = getLoginComponent()
+        component.inject(this)
+        supportFragmentManager.fragmentFactory = component.getFragmentFactory()
+    }
+
+    private fun initViews() {
         window.requestFeature(Window.FEATURE_ACTION_BAR)
         supportActionBar!!.hide()
-
         val viewModel = getViewModel(viewModelProvider)
         val binding = DataBindingUtil.setContentView<LoginActivityBinding>(this, R.layout.login_activity)
         binding.lifecycleOwner = this@LoginActivity
@@ -73,5 +83,11 @@ class LoginActivity : AppCompatActivity() {
         webView.takeIf { it.canGoBack() }
             ?.goBack()
             ?: super.onBackPressed()
+    }
+
+    private fun getLoginComponent(): LoginComponent = getViewModel {
+        AppComponent
+            .getInstance(this)
+            .createLoginComponent()
     }
 }

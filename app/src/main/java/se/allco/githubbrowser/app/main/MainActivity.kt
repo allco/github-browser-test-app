@@ -8,7 +8,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import se.allco.githubbrowser.R
-import se.allco.githubbrowser.app.di.AppComponent
 import se.allco.githubbrowser.app.main.di.MainComponent
 import se.allco.githubbrowser.app.user.UserModel
 import se.allco.githubbrowser.app.user.di.UserComponentHolder
@@ -22,27 +21,31 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var userModel: UserModel
 
-    @Inject
-    lateinit var userComponentHolder: UserComponentHolder
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        AppComponent.getInstance(this).inject(this)
-        supportFragmentManager.fragmentFactory = getMainComponent().getFragmentFactory()
+        inject()
         super.onCreate(savedInstanceState)
-        ensureUserLoggedIn(userModel) {
-            val binding = DataBindingUtil.setContentView<MainActiviyBinding>(this, R.layout.main_activiy)
-            val navController = findNavController(R.id.nav_host_fragment)
-            val appBarConfiguration = AppBarConfiguration(
-                setOf(R.id.navigation_repos, R.id.navigation_account)
-            )
-            setupActionBarWithNavController(navController, appBarConfiguration)
-            binding.navView.setupWithNavController(navController)
-        }
+        ensureUserLoggedIn(userModel) { initViews() }
+    }
+
+    private fun inject() {
+        val component = getMainComponent()
+        component.inject(this)
+        supportFragmentManager.fragmentFactory = component.getFragmentFactory()
+    }
+
+    private fun initViews() {
+        val binding = DataBindingUtil.setContentView<MainActiviyBinding>(this, R.layout.main_activiy)
+        val navController = findNavController(R.id.nav_host_fragment)
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.navigation_repos, R.id.navigation_account)
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        binding.navView.setupWithNavController(navController)
     }
 
     private fun getMainComponent(): MainComponent = getViewModel {
-        userComponentHolder
-            .getUserComponent()
+        UserComponentHolder
+            .getUserComponent(this)
             .createMainComponent()
     }
 }

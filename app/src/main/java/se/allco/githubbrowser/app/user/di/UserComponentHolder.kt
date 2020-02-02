@@ -1,5 +1,6 @@
 package se.allco.githubbrowser.app.user.di
 
+import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
@@ -16,10 +17,17 @@ import javax.inject.Singleton
 
 @Singleton
 class UserComponentHolder @Inject constructor(
-    private val appComponent: AppComponent,
     private val userModel: UserModel,
+    private val userComponentFactory: UserComponent.Factory,
     @Named(AppModule.PROCESS_LIFECYCLE_OWNER) processLifecycleOwner: LifecycleOwner
 ) {
+    companion object {
+        fun getUserComponent(context: Context) =
+            AppComponent
+                .getInstance(context)
+                .getUserComponentHolder()
+                .getUserComponent()
+    }
 
     init {
         val disposables = SerialDisposable()
@@ -41,10 +49,10 @@ class UserComponentHolder @Inject constructor(
     }
 
     private var userComponent: UserComponent =
-        appComponent.getUserComponentFactory().create(User.Invalid)
+        userComponentFactory.create(User.Invalid)
 
     private fun onUserChanged(user: User) {
-        userComponent = appComponent.getUserComponentFactory().create(user)
+        userComponent = userComponentFactory.create(user)
     }
 
     fun getUserComponent(): UserComponent = userComponent

@@ -5,9 +5,9 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import se.allco.githubbrowser.app.BaseApplication
-import se.allco.githubbrowser.app.login.LoginActivity
-import se.allco.githubbrowser.app.main.MainActivity
+import se.allco.githubbrowser.app.login.di.LoginComponent
 import se.allco.githubbrowser.app.user.di.UserComponent
+import se.allco.githubbrowser.app.user.di.UserComponentHolder
 import javax.inject.Singleton
 
 @Singleton
@@ -23,13 +23,11 @@ interface AppComponent {
     interface Builder {
         @BindsInstance
         fun setApplication(application: Application)
-
         fun build(): AppComponent
     }
 
+    fun createLoginComponent(): LoginComponent
+    fun getUserComponentHolder(): UserComponentHolder
     fun getUserComponentFactory(): UserComponent.Factory
-
     fun inject(baseApplication: BaseApplication)
-    fun inject(activity: LoginActivity)
-    fun inject(mainActivity: MainActivity)
 }
