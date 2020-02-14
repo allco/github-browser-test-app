@@ -13,7 +13,12 @@ class AutoLoginModel @Inject constructor(private val repository: AutoLoginReposi
             .toSingleOptional()
             .flatMap { tokenOptional ->
                 tokenOptional.asNullable()
-                    ?.let { repository.fetchGithubUser(it) }
+                    ?.let { repository.fetchUserData(it) }
                     ?: Single.just(User.Invalid)
+            }
+            .onErrorResumeNext {
+                repository
+                    .clearUserData()
+                    .andThen(Single.just(User.Invalid))
             }
 }

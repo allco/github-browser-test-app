@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_navigation"
+    app:startDestination="@+id/navigation_login_auto"
+    >
+
+    <fragment
+        android:id="@+id/navigation_login_auto"
+        android:name="se.allco.githubbrowser.app.login.autologin.AutoLoginFragment"
+        android:label="@string/login_auto_title"
+        tools:layout="@layout/login_auto_fragment"
+        />
+
+    <fragment
+        android:id="@+id/navigation_login_manual"
+        android:name="se.allco.githubbrowser.app.login.manuallogin.ManualLoginFragment"
+        android:label="@string/login_manual_title"
+        tools:layout="@layout/login_manual_fragment"
+        />
+
+    <action
+        android:id="@+id/to_manual_login"
+        app:destination="@+id/navigation_login_manual"
+        app:enterAnim="@android:anim/fade_in"
+        app:exitAnim="@android:anim/fade_out"
+        app:popEnterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out"
+        app:popUpTo="@id/navigation_login_auto"
+        app:popUpToInclusive="true"
+        />
+
+</navigation>

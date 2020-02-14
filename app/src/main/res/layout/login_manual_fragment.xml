@@ -10,57 +10,54 @@
 
         <variable
             name="viewModel"
-            type="se.allco.githubbrowser.app.main.account.AccountViewModel"
+            type="se.allco.githubbrowser.app.login.manuallogin.ManualLoginViewModel"
             />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        tools:context=".app.login.LoginActivity"
         >
 
-        <TextView
-            android:id="@+id/text_user_name"
-            android:layout_width="0dp"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@{viewModel.userName}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@tools:sample/full_names"
-            />
-
-        <Button
-            android:id="@+id/button_logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:onClick="@{() -> viewModel.onLogout()}"
-            android:text="@string/main_account_button_logout"
-            app:layout_constraintStart_toStartOf="@+id/text_user_name"
-            app:layout_constraintTop_toBottomOf="@+id/text_user_name"
-            tools:layout_editor_absoluteX="16dp"
             />
 
         <TextView
             android:id="@+id/text_error"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_margin="16dp"
+            android:gravity="center"
             android:text="@{viewModel.errorMessage}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             bind:goneUnless="@{viewModel.showError}"
-            tools:text="@tools:sample/lorem/random[9]"
+            tools:background="#AAFFFF00"
+            tools:text="@tools:sample/lorem[9]"
+            />
+
+        <Button
+            android:id="@+id/button_retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:onClick="@{v -> viewModel.onRetryClicked()}"
+            android:text="@string/button_retry"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_error"
+            bind:goneUnless="@{viewModel.showError}"
             />
 
         <ProgressBar
@@ -75,12 +72,18 @@
             bind:goneUnless="@{viewModel.showLoading}"
             />
 
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/contentGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_ids="button_logout,text_user_name"
+        <WebView
+            android:id="@+id/web_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="top|center_horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            bind:destination="@{viewModel.webViewModel.destination}"
             bind:goneUnless="@{viewModel.showContent}"
+            bind:settings="@{viewModel.webViewModel.settings}"
+            tools:alpha="0.5"
+            tools:background="#AAFFAAAA"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

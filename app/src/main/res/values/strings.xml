@@ -1,16 +1,19 @@
 <resources>
     <string name="app_name">GithubBrowser</string>
+    <!--    TODO rename strings according to the model <feature>_<subfeature>_<context>_.... -->
     <string name="title_repos">Repositories</string>
     <string name="title_account">Account</string>
 
-    <string name="login_activity_title">Login</string>
-
-    <string name="error_generic">Something went wrong. Try again later.</string>
-    <string name="error_no_internet_connection">There is no internet connection</string>
+    <string name="error_generic">Something went wrong.\nTry again later.</string>
     <string name="button_retry">Retry</string>
-
 
     <string name="main_account_button_logout">Logout</string>
 
+    <string name="login_activity_title">Login</string>
+    <string name="login_auto_title">Automatic Sign In</string>
+    <string name="login_manual_title">Authentication</string>
+    <string name="login_manual_error_web_loading">Web page loading error.</string>
+    <string name="login_manual_error_no_network_connection">There is no internet connection.</string>
+    <string name="login_manual_error_user_data_fetching">User data fetching error.</string>
 
 </resources>

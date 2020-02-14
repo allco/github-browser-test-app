@@ -4,11 +4,10 @@ import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
-import android.view.Window
-import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.TaskStackBuilder
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import se.allco.githubbrowser.R
 import se.allco.githubbrowser.app.di.AppComponent
 import se.allco.githubbrowser.app.login.di.LoginComponent
@@ -47,8 +46,6 @@ class LoginActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModelProvider: Provider<LoginActivityViewModel>
 
-    private lateinit var webView: WebView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         inject()
         super.onCreate(savedInstanceState)
@@ -62,15 +59,14 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        window.requestFeature(Window.FEATURE_ACTION_BAR)
-        supportActionBar!!.hide()
-        val viewModel = getViewModel(viewModelProvider)
+        val viewModel = getViewModel()
         val binding = DataBindingUtil.setContentView<LoginActivityBinding>(this, R.layout.login_activity)
         binding.lifecycleOwner = this@LoginActivity
         binding.viewModel = viewModel
-        webView = binding.include.webView
-        viewModel.showActionBar.observe(this@LoginActivity, ObserverNonNull { supportActionBar!!.show() })
         viewModel.loggedInUser.observe(this@LoginActivity, ObserverNonNull(::onUserLoggedIn))
+        viewModel.launchManualLogin.observe(this@LoginActivity, ObserverNonNull {
+            findNavController(R.id.nav_host_fragment).navigate(R.id.to_manual_login)
+        })
     }
 
     private fun onUserLoggedIn(@Suppress("UNUSED_PARAMETER") user: User.Valid) {
@@ -79,11 +75,7 @@ class LoginActivity : AppCompatActivity() {
         finishAfterTransition()
     }
 
-    override fun onBackPressed() {
-        webView.takeIf { it.canGoBack() }
-            ?.goBack()
-            ?: super.onBackPressed()
-    }
+    private fun getViewModel() = getViewModel(viewModelProvider)
 
     private fun getLoginComponent(): LoginComponent = getViewModel {
         AppComponent

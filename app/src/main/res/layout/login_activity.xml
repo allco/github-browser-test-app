@@ -2,8 +2,6 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     >
 
     <data>
@@ -13,72 +11,25 @@
             type="se.allco.githubbrowser.app.login.LoginActivityViewModel"
             />
 
-        <import type="android.view.View" />
+        <import type="android.view.View"/>
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        tools:context=".app.login.LoginActivity"
+        android:background="@android:color/white"
         >
 
-        <TextView
-            android:id="@+id/textError"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:gravity="center"
-            android:text="@{viewModel.errorMessage}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            bind:goneUnless="@{viewModel.showError}"
-            tools:background="#AAFFFF00"
-            tools:text="@tools:sample/lorem[9]"
+        <fragment
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/login_navigation"
             />
 
-        <Button
-            android:id="@+id/buttonRetry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:onClick="@{v -> viewModel.onRetryClicked()}"
-            android:text="@string/button_retry"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textError"
-            bind:goneUnless="@{viewModel.showError}"
-            />
+    </FrameLayout>
 
-        <ProgressBar
-            android:id="@+id/spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            bind:goneUnless="@{viewModel.showLoading}"
-            />
-
-
-        <include
-            android:id="@+id/include"
-            layout="@layout/component_web_view"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:visibility='@{viewModel.showGithubLogin ? View.VISIBLE : View.GONE}'
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            app:viewModel="@{viewModel.webComponentViewModel}"
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -141,10 +141,11 @@ fun <T> Single<T>.toLiveData(disposableContainer: CompositeDisposable): LiveData
  * @param initialValue the first value to be emitted
  * @param thenLiveData LiveData that should be appended
  */
-fun <T> startWithAndThen(initialValue: T?, thenLiveData: LiveData<T>): LiveData<T> = MediatorLiveData<T>().apply {
-    addSource(thenLiveData) { value = it }
-    value = initialValue
-}
+fun <T> startWithAndThen(initialValue: T?, thenLiveData: LiveData<T>): LiveData<T> =
+    MediatorLiveData<T>().apply {
+        addSource(thenLiveData) { value = it }
+        value = initialValue
+    }
 
 /**
  * Converts LiveData to a Rx stream.
@@ -160,6 +161,12 @@ fun <T> LiveData<T>.toObservable(): Observable<Optional<T>> = Observable.create 
     observeForever(observer)
     emitter.setCancellable { removeObserver(observer) }
 }
+
+fun <T> LiveData<T>.mergeWith(liveData: LiveData<T>): LiveData<T> =
+    MediatorLiveData<T>().apply {
+        addSource(this) { value = it }
+        addSource(liveData) { value = it }
+    }
 
 /**
  * @see Transformations.map

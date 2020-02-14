@@ -2,16 +2,22 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme"
-        parent="Theme.AppCompat.Light.DarkActionBar">
+        parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="toolbarStyle">@style/AppTheme.ActionBar</item>
+        <item name="actionBarTheme">@style/AppTheme.ActionBar</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowTitleSize">0dp</item>
+    <style name="AppTheme.Splash">
+        <item name="android:windowBackground">@drawable/ic_splash</item>
+    </style>
+
+    <style name="AppTheme.ActionBar"
+        parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="titleTextAppearance">?attr/textAppearanceSubtitle1</item>
     </style>
 
 </resources>

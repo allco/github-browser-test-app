@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
+    android:id="@+id/main_navigation"
     app:startDestination="@+id/navigation_repos"
     >
 
@@ -13,7 +13,6 @@
         android:label="@string/title_repos"
         tools:layout="@layout/main_repos_fragment"
         />
-
 
     <fragment
         android:id="@+id/navigation_account"

@@ -23,49 +23,50 @@ data class FileChooserRequest(
 )
 
 class WebViewSettings(
-    val overrideLoading: (String?) -> Boolean,
-    val useCache: Boolean,
+    val useCache: Boolean = false,
     val javaScriptEnabled: Boolean = false,
     val domStorageEnabled: Boolean = false,
     val allowContentAccess: Boolean = false,
     val geolocationEnabled: Boolean = false,
     val allowFileAccess: Boolean = false,
     val zoomEnabled: Boolean = false,
-    val onChooseFile: ((FileChooserRequest) -> Maybe<Array<Uri>>)? = null
+    var overrideLoading: ((Uri?) -> Boolean)? = null,
+    var onChooseFile: ((FileChooserRequest) -> Maybe<Array<Uri>>)? = null
 ) {
     enum class State { STARTED, FINISHED, ERROR }
 
     val webClient = WebClient()
     val chromeClient = ChromeClient()
-    private val statesInternal: PublishSubject<State> = PublishSubject.create()
-    val states: Observable<State> = statesInternal
+    private val _states: PublishSubject<State> = PublishSubject.create()
+    val webPageStates: Observable<State>
+        get() = _states
 
     inner class WebClient : WebViewClient() {
 
         private val isAPI24AndAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
 
         override fun onReceivedError(view: WebView?, errorCode: Int, description: String?, failingUrl: String?) {
-            if (!isAPI24AndAbove) statesInternal.onNext(State.ERROR)
+            if (!isAPI24AndAbove) _states.onNext(State.ERROR)
         }
 
         override fun onReceivedError(view: WebView?, request: WebResourceRequest?, err: WebResourceError?) {
-            if (isAPI24AndAbove) statesInternal.onNext(State.ERROR)
+            if (isAPI24AndAbove) _states.onNext(State.ERROR)
         }
 
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-            statesInternal.onNext(State.STARTED)
+            _states.onNext(State.STARTED)
         }
 
         override fun onPageFinished(view: WebView?, url: String?) {
-            statesInternal.onNext(State.FINISHED)
+            _states.onNext(State.FINISHED)
         }
 
         @Suppress("DEPRECATION")
         override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean =
-            if (!isAPI24AndAbove) overrideLoading.invoke(url) else false
+            overrideLoading?.takeIf { !isAPI24AndAbove }?.invoke(url?.let { Uri.parse(it) }) ?: false
 
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean =
-            if (isAPI24AndAbove) overrideLoading.invoke(request?.url?.toString()) else false
+            overrideLoading?.takeIf { isAPI24AndAbove }?.invoke(request?.url) ?: false
     }
 
     inner class ChromeClient : WebChromeClient() {
@@ -88,8 +89,9 @@ class WebViewSettings(
                 allowMultiple = fileChooserParams?.mode == FileChooserParams.MODE_OPEN_MULTIPLE
             )
 
+            val chooseFile = onChooseFile
             val disposable = when {
-                onChooseFile != null -> onChooseFile.invoke(request).subscribeSafely {
+                chooseFile != null -> chooseFile.invoke(request).subscribeSafely {
                     onSuccess = { filePathCallback.onReceiveValue(it) }
                     onComplete = { filePathCallback.onReceiveValue(null) }
                 }

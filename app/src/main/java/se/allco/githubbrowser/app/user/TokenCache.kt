@@ -40,9 +40,9 @@ class TokenCache @Inject constructor(
                 ?: emitter.onComplete()
         }
 
-    fun write(user: User.Valid): Completable =
+    fun write(token: GithubToken): Completable =
         Completable.fromAction {
-            prefs.edit().apply { putString(KEY, gsonBuilderProvider.get().create().toJson(user.token)) }.apply()
+            prefs.edit().apply { putString(KEY, gsonBuilderProvider.get().create().toJson(token)) }.apply()
         }
 
     fun erase(): Completable = Completable.fromAction {

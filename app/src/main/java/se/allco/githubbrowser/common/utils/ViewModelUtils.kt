@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import javax.inject.Provider
 
 /**
@@ -55,34 +54,16 @@ fun <T : ViewModel> createViewFactoryFactory(factory: () -> T): ViewModelProvide
  * the ViewModelStorage
  */
 inline fun <reified T : ViewModel> Fragment.getViewModel(viewModelProvider: Provider<T>): T =
-    ViewModelProviders.of(this, createViewFactoryFactory { viewModelProvider.get() }).get(T::class.java)
+    ViewModelProvider(this, createViewFactoryFactory { viewModelProvider.get() }).get(T::class.java)
 
 inline fun <reified T : ViewModel> Fragment.getViewModel(crossinline viewModelProvider: () -> T): T =
-    ViewModelProviders.of(this, createViewFactoryFactory { viewModelProvider() }).get(T::class.java)
+    ViewModelProvider(this, createViewFactoryFactory { viewModelProvider() }).get(T::class.java)
 
 inline fun <reified T : ViewModel> FragmentActivity.getViewModel(viewModelProvider: Provider<T>): T =
-    ViewModelProviders.of(this, createViewFactoryFactory { viewModelProvider.get() }).get(T::class.java)
+    ViewModelProvider(this, createViewFactoryFactory { viewModelProvider.get() }).get(T::class.java)
 
 inline fun <reified T : ViewModel> FragmentActivity.getViewModel(crossinline viewModelProvider: () -> T): T =
-    ViewModelProviders.of(this, createViewFactoryFactory { viewModelProvider() }).get(T::class.java)
-
-fun <T : ViewModel> Fragment.getViewModel(
-    viewModelProvider: Provider<T>,
-    clazz: Class<T>,
-    initializer: (T.() -> Unit)? = null
-): T =
-    ViewModelProviders.of(this, createViewFactoryFactory {
-        viewModelProvider.get().also { initializer?.invoke(it) }
-    }).get(clazz)
-
-fun <T : ViewModel> FragmentActivity.getViewModel(
-    viewModelProvider: Provider<T>,
-    clazz: Class<T>,
-    initializer: (T.() -> Unit)? = null
-): T =
-    ViewModelProviders.of(this, createViewFactoryFactory {
-        viewModelProvider.get().also { initializer?.invoke(it) }
-    }).get(clazz)
+    ViewModelProvider(this, createViewFactoryFactory { viewModelProvider() }).get(T::class.java)
 
 fun AndroidViewModel.getString(@StringRes res: Int): String = this.getApplication<Application>().getString(res)
 

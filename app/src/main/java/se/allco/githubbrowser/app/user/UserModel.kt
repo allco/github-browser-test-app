@@ -3,6 +3,7 @@ package se.allco.githubbrowser.app.user
 import android.webkit.CookieManager
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -24,7 +25,7 @@ class UserModel @Inject constructor(
         userSubject.onNext(user)
     }
 
-    val userFeed: Observable<User> = userSubject
+    val userFeed: Observable<User> = userSubject.distinctUntilChanged()
 
     fun getCurrentUser(): User =
         userSubject
@@ -32,16 +33,6 @@ class UserModel @Inject constructor(
             .blockingFirst()
 
     fun logoutUser(): Completable =
-        userFeed
-            .firstOrError()
-            .flatMapCompletable { user ->
-                when (user) {
-                    is User.Valid -> doLogoutUser()
-                    User.Invalid -> Completable.complete()
-                }
-            }
-
-    private fun doLogoutUser() =
         tokenCache
             .erase()
             .andThen(removeAllCookies())
@@ -49,7 +40,8 @@ class UserModel @Inject constructor(
             .timeout(LOGOUT_TIMEOUT_MS, TimeUnit.MILLISECONDS)
 }
 
-private fun removeAllCookies() = Completable.create { emitter ->
-    CookieManager.getInstance().removeAllCookies { emitter.onComplete() }
-}
+private fun removeAllCookies(): Completable =
+    Completable.create { emitter ->
+        CookieManager.getInstance().removeAllCookies { emitter.onComplete() }
+    }.subscribeOn(AndroidSchedulers.mainThread())
 
