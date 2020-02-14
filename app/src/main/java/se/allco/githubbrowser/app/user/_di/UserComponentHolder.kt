@@ -1,12 +1,12 @@
-package se.allco.githubbrowser.app.user.di
+package se.allco.githubbrowser.app.user._di
 
 import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposables
 import io.reactivex.disposables.SerialDisposable
-import se.allco.githubbrowser.app.di.AppComponent
-import se.allco.githubbrowser.app.di.AppModule
+import se.allco.githubbrowser.app._di.AppComponent
+import se.allco.githubbrowser.app._di.AppModule
 import se.allco.githubbrowser.app.user.User
 import se.allco.githubbrowser.app.user.UserModel
 import se.allco.githubbrowser.common.utils.attachLifecycleEventsObserver

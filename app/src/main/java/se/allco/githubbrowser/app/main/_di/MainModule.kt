@@ -1,4 +1,4 @@
-package se.allco.githubbrowser.app.main.di
+package se.allco.githubbrowser.app.main._di
 
 import dagger.Module
 

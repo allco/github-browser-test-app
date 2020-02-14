@@ -2,8 +2,8 @@ package se.allco.githubbrowser.app
 
 import android.app.Application
 import se.allco.githubbrowser.BuildConfig
-import se.allco.githubbrowser.app.di.AppComponent
-import se.allco.githubbrowser.app.di.DaggerAppComponent
+import se.allco.githubbrowser.app._di.AppComponent
+import se.allco.githubbrowser.app._di.DaggerAppComponent
 import timber.log.Timber
 
 class BaseApplication : Application() {

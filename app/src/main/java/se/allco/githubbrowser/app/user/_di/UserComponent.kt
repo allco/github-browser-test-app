@@ -1,8 +1,8 @@
-package se.allco.githubbrowser.app.user.di
+package se.allco.githubbrowser.app.user._di
 
 import dagger.BindsInstance
 import dagger.Subcomponent
-import se.allco.githubbrowser.app.main.di.MainComponent
+import se.allco.githubbrowser.app.main._di.MainComponent
 import se.allco.githubbrowser.app.user.User
 
 @Subcomponent(modules = [UserModule::class])

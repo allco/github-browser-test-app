@@ -1,4 +1,4 @@
-package se.allco.githubbrowser.app.di
+package se.allco.githubbrowser.app._di
 
 import android.app.Activity
 import android.app.Application

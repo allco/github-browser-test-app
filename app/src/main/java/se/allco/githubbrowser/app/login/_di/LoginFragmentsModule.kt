@@ -1,4 +1,4 @@
-package se.allco.githubbrowser.app.login.di
+package se.allco.githubbrowser.app.login._di
 
 import androidx.fragment.app.Fragment
 import dagger.Binds

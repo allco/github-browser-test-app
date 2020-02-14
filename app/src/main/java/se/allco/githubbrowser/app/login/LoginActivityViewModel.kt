@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import se.allco.githubbrowser.app.login._di.LoginScope
 import se.allco.githubbrowser.app.login.autologin.AutoLoginFragment
-import se.allco.githubbrowser.app.login.di.LoginScope
 import se.allco.githubbrowser.app.login.manuallogin.ManualLoginFragment
 import se.allco.githubbrowser.app.user.User
 import se.allco.githubbrowser.common.ui.toSingleLiveEvent
