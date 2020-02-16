@@ -6,8 +6,8 @@ import dagger.BindsInstance
 import dagger.Component
 import se.allco.githubbrowser.app.BaseApplication
 import se.allco.githubbrowser.app.login._di.LoginComponent
+import se.allco.githubbrowser.app.user.UserComponentHolder
 import se.allco.githubbrowser.app.user._di.UserComponent
-import se.allco.githubbrowser.app.user._di.UserComponentHolder
 import javax.inject.Singleton
 
 @Singleton

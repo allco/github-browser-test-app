@@ -16,6 +16,7 @@ import se.allco.githubbrowser.common.utils.combine
 import se.allco.githubbrowser.common.utils.getString
 import se.allco.githubbrowser.common.utils.map
 import se.allco.githubbrowser.common.utils.toLiveData
+import timber.log.Timber
 import javax.inject.Inject
 
 class ManualLoginViewModel @Inject constructor(
@@ -61,7 +62,7 @@ class ManualLoginViewModel @Inject constructor(
             .switchMap {
                 waitForGithubCode()
                     .switchMapSingle(::waitForValidUser)
-                    .onErrorResumeNext(createErrorHandler())
+                    .onErrorResumeNext(::createErrorHandler)
             }
             .toLiveData(disposables)
 
@@ -79,11 +80,13 @@ class ManualLoginViewModel @Inject constructor(
             .ofType(GithubLoginWebViewModel.State.ResultCode::class.java)
             .map { it.code }
 
-    private fun createErrorHandler(): Observable<User.Valid> =
-        model
+    private fun createErrorHandler(err: Throwable): Observable<User.Valid> {
+        Timber.w(err, "ManualLoginViewModel failed")
+        return model
             .createErrorHandler()
             .doOnSubscribe { renderState(State.Error(R.string.login_manual_error_user_data_fetching)) }
             .andThen(Observable.never())
+    }
 
     private fun GithubLoginWebViewModel.State.asViewModelState(): State? =
         when (this) {

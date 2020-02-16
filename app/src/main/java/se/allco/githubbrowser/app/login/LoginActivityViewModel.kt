@@ -21,19 +21,20 @@ class LoginActivityViewModel @Inject constructor(
     val launchManualLogin: LiveData<Unit> = _launchManualLogin.toSingleLiveEvent()
     val loggedInUser = MutableLiveData<User.Valid>()
 
-    init {
-        loggedInUser.observeForever { repository.switchLoggedInUser(it) }
-    }
-
     override fun onAutoLoginResult(user: User) {
         if (user is User.Valid) {
-            loggedInUser.postValue(user)
+            onUserLoggedIn(user)
         } else {
             _launchManualLogin.postValue(Unit)
         }
     }
 
     override fun onManualLoginResult(user: User.Valid) {
+        onUserLoggedIn(user)
+    }
+
+    private fun onUserLoggedIn(user: User.Valid) {
+        repository.switchLoggedInUser(user)
         loggedInUser.postValue(user)
     }
 }

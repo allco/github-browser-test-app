@@ -19,4 +19,5 @@ interface UserComponent {
     }
 
     fun createMainComponent(): MainComponent
+    fun getCurrentUser(): User
 }

@@ -3,18 +3,18 @@ package se.allco.githubbrowser.app.main.account
 import io.reactivex.Completable
 import io.reactivex.Observable
 import se.allco.githubbrowser.app.user.User
-import se.allco.githubbrowser.app.user.UserModel
+import se.allco.githubbrowser.app.user.UserComponentHolder
 import javax.inject.Inject
 
 class AccountRepository @Inject constructor(
-    private val userModel: UserModel
+    private val userComponentHolder: UserComponentHolder
 ) {
 
     fun getUserName(): Observable<String> =
-        userModel
-            .userFeed
-            .ofType(User.Valid::class.java)
-            .map { it.userName }
+        userComponentHolder
+            .getUserComponentsFeed()
+            .map { it.getCurrentUser() }
+            .map { requireNotNull(it as? User.Valid).userName }
 
-    fun logoutUser(): Completable = userModel.logoutUser()
+    fun logoutUser(): Completable = userComponentHolder.logoutUser()
 }

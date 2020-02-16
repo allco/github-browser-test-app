@@ -16,4 +16,7 @@
     <string name="login_manual_error_no_network_connection">There is no internet connection.</string>
     <string name="login_manual_error_user_data_fetching">User data fetching error.</string>
 
+    <string name="main_repos_error_fetching_data">Repositories fetching error.</string>
+    <string name="main_repos_no_repos_found">Current GitHub user doesn\'t have any repository.</string>
+
 </resources>

@@ -3,16 +3,17 @@ package se.allco.githubbrowser.app.user.http
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import se.allco.githubbrowser.BuildConfig
+import se.allco.githubbrowser.app.user._di.UserScope
 import javax.inject.Inject
-import javax.inject.Provider
 
-class RetrofitProvider @Inject constructor(
+@UserScope
+class RetrofitFactory @Inject constructor(
     private val authInterceptor: AuthenticationInterceptor,
     private val okHttpBuilder: OkHttpClient.Builder,
     private val retrofitBuilder: Retrofit.Builder
-) : Provider<Retrofit> {
+) {
 
-    override fun get(): Retrofit =
+    fun create(): Retrofit =
         retrofitBuilder
             .client(
                 okHttpBuilder

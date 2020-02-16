@@ -6,13 +6,13 @@ import io.reactivex.disposables.Disposables
 import io.reactivex.disposables.SerialDisposable
 import se.allco.githubbrowser.app.login.LoginActivity
 import se.allco.githubbrowser.app.user.User
-import se.allco.githubbrowser.app.user.UserModel
+import se.allco.githubbrowser.app.user.UserComponentHolder
 import se.allco.githubbrowser.common.utils.attachLifecycleEventsObserver
 import se.allco.githubbrowser.common.utils.subscribeSafely
 
-fun FragmentActivity.ensureUserLoggedIn(userModel: UserModel, onValidUser: () -> Unit) {
+fun FragmentActivity.ensureUserLoggedIn(onValidUser: () -> Unit) {
 
-    fun onUser(user: User, callback: (() -> Unit)? = null) {
+    fun onUserChanged(user: User, callback: (() -> Unit)? = null) {
         when (user) {
             is User.Valid -> callback?.invoke()
             else -> {
@@ -26,10 +26,12 @@ fun FragmentActivity.ensureUserLoggedIn(userModel: UserModel, onValidUser: () ->
     lifecycle.attachLifecycleEventsObserver {
         onResumed = {
             disposables.set(
-                userModel
-                    .userFeed
+                UserComponentHolder
+                    .getInstance(this@ensureUserLoggedIn)
+                    .getUserComponentsFeed()
+                    .map { it.getCurrentUser() }
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext { onUser(it) }
+                    .doOnNext { onUserChanged(it) }
                     .subscribeSafely()
             )
         }
@@ -38,6 +40,11 @@ fun FragmentActivity.ensureUserLoggedIn(userModel: UserModel, onValidUser: () ->
         }
     }
 
-    onUser(userModel.getCurrentUser(), onValidUser)
+    onUserChanged(
+        UserComponentHolder
+            .getUserComponent(this)
+            .getCurrentUser(),
+        onValidUser
+    )
 }
 

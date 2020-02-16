@@ -14,15 +14,74 @@
             />
     </data>
 
-
-    <androidx.recyclerview.widget.RecyclerView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        bind:listItems="@{viewModel.listItems}"
-        tools:itemCount="4"
-        tools:listitem="@layout/main_repos_item_fragment"
-        />
+        >
+
+        <TextView
+            android:id="@+id/text_error"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="@{viewModel.errorMessage}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:goneUnless="@{viewModel.showError}"
+            tools:text="@tools:sample/lorem[9]"
+            />
+
+        <Button
+            android:id="@+id/button_retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:onClick="@{v -> viewModel.onRetryClicked()}"
+            android:text="@string/button_retry"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_error"
+            bind:goneUnless="@{viewModel.showRetryButton}"
+            />
+
+        <ProgressBar
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:goneUnless="@{viewModel.showLoading}"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_repos"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/lightGrey"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:dividerSize="@{1}"
+            bind:goneUnless="@{viewModel.showContent}"
+            bind:hasFixedSize="@{false}"
+            bind:listItems="@{viewModel.listItems}"
+            tools:itemCount="4"
+            tools:listitem="@layout/main_repos_item"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

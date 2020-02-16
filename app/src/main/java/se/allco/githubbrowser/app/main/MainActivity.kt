@@ -8,22 +8,17 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import se.allco.githubbrowser.R
 import se.allco.githubbrowser.app.main._di.MainComponent
-import se.allco.githubbrowser.app.user.UserModel
-import se.allco.githubbrowser.app.user._di.UserComponentHolder
+import se.allco.githubbrowser.app.user.UserComponentHolder
 import se.allco.githubbrowser.common.ui.ensureUserLoggedIn
 import se.allco.githubbrowser.common.utils.getViewModel
 import se.allco.githubbrowser.databinding.MainActiviyBinding
-import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
-
-    @Inject
-    lateinit var userModel: UserModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         inject()
         super.onCreate(savedInstanceState)
-        ensureUserLoggedIn(userModel) { initViews() }
+        ensureUserLoggedIn { initViews() }
     }
 
     private fun inject() {

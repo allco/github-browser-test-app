@@ -1,6 +1,5 @@
 package se.allco.githubbrowser.app.user.http
 
-import android.util.Base64
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Protocol
@@ -20,10 +19,7 @@ class AuthenticationInterceptor @Inject constructor(private val user: User) : In
                 chain.proceed(
                     chain.request()
                         .newBuilder()
-                        .header(
-                            "Authorization",
-                            "Basic " + Base64.encodeToString(user.token.toByteArray(), Base64.NO_WRAP)
-                        )
+                        .header("Authorization", "token ${user.token}")
                         .build()
                 )
             User.Invalid ->
@@ -33,8 +29,8 @@ class AuthenticationInterceptor @Inject constructor(private val user: User) : In
                     .code(HTTP_UNAUTHORIZED)
                     .request(chain.request())
                     .protocol(Protocol.HTTP_2)
-                    .message("<invalid token dummy message>")
-                    .body("<invalid token dummy body>".toResponseBody("*/*".toMediaType()))
+                    .message("<Request failed. User is unauthenticated.>")
+                    .body("<Request failed. User is unauthenticated.>".toResponseBody("*/*".toMediaType()))
                     .build()
         }
 }
