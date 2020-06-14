@@ -29,7 +29,7 @@ class LoginActivity : AppCompatActivity() {
             intent.getParcelableExtra(ARG_CALLBACK)
 
         fun createIntent(activity: Activity): Intent {
-            // create an PendingIntent based on the same intent which `activity` was started with.
+            // create a `PendingIntent` based on the same `Intent` which the `Activity` was started with.
             val callback = TaskStackBuilder
                 .create(activity)
                 .addNextIntentWithParentStack(activity.intent)
