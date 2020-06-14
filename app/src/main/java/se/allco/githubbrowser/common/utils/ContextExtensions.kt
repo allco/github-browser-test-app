@@ -11,17 +11,12 @@ import android.os.Build
 import android.os.Vibrator
 import android.util.TypedValue
 import android.view.LayoutInflater
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
-import androidx.annotation.FloatRange
-import androidx.annotation.PluralsRes
-import androidx.annotation.RawRes
+import androidx.annotation.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import java.nio.charset.StandardCharsets
-import java.util.Locale
+import java.util.*
 import kotlin.math.roundToInt
 
 /**

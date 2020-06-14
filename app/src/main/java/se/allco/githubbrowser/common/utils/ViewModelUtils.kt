@@ -4,11 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
-import androidx.annotation.ColorRes
-import androidx.annotation.DimenRes
-import androidx.annotation.DrawableRes
-import androidx.annotation.IntegerRes
-import androidx.annotation.StringRes
+import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -18,8 +14,9 @@ import androidx.lifecycle.ViewModelProvider
 import javax.inject.Provider
 
 /**
- *  SAM conversion does not work well for ViewModelProvider.Factory since
- *  it is not declared as generic but it has a generic method.
+ *  SAM (single abstract method interface) conversion does not work well for
+ *  ViewModelProvider.Factory because it is not declared as a generic interface
+ *  but it has a generic method.
  *
  *  This method lets to pass a lambda as a factory to [androidx.lifecycle.ViewModelProviders.of]
  *

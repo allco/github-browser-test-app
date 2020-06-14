@@ -1,17 +1,6 @@
 package se.allco.githubbrowser.common.utils
 
-import io.reactivex.Completable
-import io.reactivex.CompletableEmitter
-import io.reactivex.CompletableObserver
-import io.reactivex.Emitter
-import io.reactivex.Flowable
-import io.reactivex.Maybe
-import io.reactivex.MaybeObserver
-import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.Single
-import io.reactivex.SingleEmitter
-import io.reactivex.SingleObserver
+import io.reactivex.*
 import io.reactivex.annotations.NonNull
 import io.reactivex.disposables.Disposable
 import io.reactivex.internal.disposables.DisposableHelper

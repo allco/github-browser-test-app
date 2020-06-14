@@ -7,12 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import io.reactivex.disposables.CompositeDisposable
 import se.allco.githubbrowser.R
 import se.allco.githubbrowser.common.ui.delayedSpinner
-import se.allco.githubbrowser.common.utils.combine
-import se.allco.githubbrowser.common.utils.getString
-import se.allco.githubbrowser.common.utils.map
-import se.allco.githubbrowser.common.utils.plusAssign
-import se.allco.githubbrowser.common.utils.subscribeSafely
-import se.allco.githubbrowser.common.utils.toLiveData
+import se.allco.githubbrowser.common.utils.*
 import javax.inject.Inject
 
 class AccountViewModel @Inject constructor(

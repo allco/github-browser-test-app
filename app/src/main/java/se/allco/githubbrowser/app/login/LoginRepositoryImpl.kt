@@ -7,11 +7,7 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 import se.allco.githubbrowser.BuildConfig
 import se.allco.githubbrowser.app.login.autologin.AutoLoginRepository
 import se.allco.githubbrowser.app.login.manuallogin.ManualLoginRepository

@@ -1,11 +1,7 @@
 package se.allco.githubbrowser.common.ui
 
 import androidx.lifecycle.MutableLiveData
-import io.reactivex.Completable
-import io.reactivex.Maybe
-import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.Single
+import io.reactivex.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposables
 import io.reactivex.disposables.SerialDisposable

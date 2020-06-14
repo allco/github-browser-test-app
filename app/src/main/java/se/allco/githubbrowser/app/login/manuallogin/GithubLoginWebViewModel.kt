@@ -13,7 +13,7 @@ import se.allco.githubbrowser.common.NetworkReporter
 import se.allco.githubbrowser.common.ui.databinding.webview.WebViewDestination
 import se.allco.githubbrowser.common.ui.databinding.webview.WebViewSettings
 import se.allco.githubbrowser.common.ui.delayedSpinner
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 
 interface GithubLoginWebViewModel {
