@@ -27,7 +27,7 @@ class AutoLoginFragment @Inject constructor(
                 val viewModel = getViewModel(viewModelProvider)
                 binding.viewModel = viewModel
                 binding.lifecycleOwner = viewLifecycleOwner
-                viewModel.result.observe(this, ObserverNonNull(::onLoginResult))
+                viewModel.result.observe(viewLifecycleOwner, ObserverNonNull(::onLoginResult))
             }
             .root
 
