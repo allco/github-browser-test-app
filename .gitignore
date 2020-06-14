@@ -70,3 +70,5 @@ gen-external-apklibs
 
 # Python precompiled files
 *.pyc
+
+/.idea/jarRepositories.xml
