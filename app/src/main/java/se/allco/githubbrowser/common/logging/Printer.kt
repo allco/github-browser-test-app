@@ -7,7 +7,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
-import java.util.LinkedList
+import java.util.*
 
 internal class Printer(private val logger: Logger) {
     private val logList = LinkedList<String>()
@@ -63,7 +63,8 @@ internal class Printer(private val logger: Logger) {
         logLines(getRequest(request, builder.level), builder.decoration, true)
         if (builder.level == LoggingInterceptor.Level.BASIC || builder.level == LoggingInterceptor.Level.BODY) {
             logLines(
-                requestBody.split(LINE_SEPARATOR.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray(),
+                requestBody.split(LINE_SEPARATOR.toRegex()).dropLastWhile { it.isEmpty() }
+                    .toTypedArray(),
                 builder.decoration,
                 true
             )
@@ -104,7 +105,8 @@ internal class Printer(private val logger: Logger) {
 
         if (builder.level == LoggingInterceptor.Level.BASIC || builder.level == LoggingInterceptor.Level.BODY) {
             logLines(
-                responseBody.split(LINE_SEPARATOR.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray(),
+                responseBody.split(LINE_SEPARATOR.toRegex()).dropLastWhile { it.isEmpty() }
+                    .toTypedArray(),
                 builder.decoration,
                 true
             )
@@ -195,9 +197,12 @@ internal class Printer(private val logger: Logger) {
         fun getRequest(request: Request, level: LoggingInterceptor.Level): Array<String> {
             val log: String
             val header = request.headers.toString()
-            val loggableHeader = level == LoggingInterceptor.Level.HEADERS || level == LoggingInterceptor.Level.BASIC
+            val loggableHeader =
+                level == LoggingInterceptor.Level.HEADERS || level == LoggingInterceptor.Level.BASIC
             log = METHOD_TAG + request.method + DOUBLE_SEPARATOR +
-                if (isEmpty(header)) "" else if (loggableHeader) HEADERS_TAG + LINE_SEPARATOR + dotHeaders(header) else ""
+                    if (isEmpty(header)) "" else if (loggableHeader) HEADERS_TAG + LINE_SEPARATOR + dotHeaders(
+                        header
+                    ) else ""
             return log.split(LINE_SEPARATOR.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         }
 
@@ -211,17 +216,19 @@ internal class Printer(private val logger: Logger) {
             message: String
         ): Array<String> {
             val log: String
-            val loggableHeader = level == LoggingInterceptor.Level.HEADERS || level == LoggingInterceptor.Level.BASIC
+            val loggableHeader =
+                level == LoggingInterceptor.Level.HEADERS || level == LoggingInterceptor.Level.BASIC
             val segmentString = slashSegments(segments)
             val addon = when {
                 isEmpty(header) -> ""
                 loggableHeader -> HEADERS_TAG + LINE_SEPARATOR +
-                    dotHeaders(header)
+                        dotHeaders(header)
                 else -> ""
             }
-            log = ((if (!TextUtils.isEmpty(segmentString)) "$segmentString - " else "") + "is success : " +
-                isSuccessful + " - " + RECEIVED_TAG + tookMs + "ms" + DOUBLE_SEPARATOR + STATUS_CODE_TAG +
-                code + " / " + message + DOUBLE_SEPARATOR + addon)
+            log =
+                ((if (!TextUtils.isEmpty(segmentString)) "$segmentString - " else "") + "is success : " +
+                        isSuccessful + " - " + RECEIVED_TAG + tookMs + "ms" + DOUBLE_SEPARATOR + STATUS_CODE_TAG +
+                        code + " / " + message + DOUBLE_SEPARATOR + addon)
 
             return log.split(LINE_SEPARATOR.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         }
@@ -235,7 +242,8 @@ internal class Printer(private val logger: Logger) {
         }
 
         private fun dotHeaders(header: String): String {
-            val headers = header.split(LINE_SEPARATOR.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            val headers =
+                header.split(LINE_SEPARATOR.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             val builder = StringBuilder()
             var tag = "─ "
             if (headers.size > 1) {

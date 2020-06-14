@@ -23,6 +23,7 @@ interface LoggingInterceptor : Interceptor {
          * No logs.
          */
         NONE,
+
         /**
          *
          * Example:
@@ -33,6 +34,7 @@ interface LoggingInterceptor : Interceptor {
         `</pre> *
          */
         BASIC,
+
         /**
          *
          * Example:
@@ -42,6 +44,7 @@ interface LoggingInterceptor : Interceptor {
         `</pre> *
          */
         HEADERS,
+
         /**
          *
          * Example:

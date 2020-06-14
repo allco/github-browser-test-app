@@ -57,7 +57,15 @@ class LoggingInterceptorImpl internal constructor(private val builder: LoggingIn
             )
             body = bodyString.toResponseBody(contentType)
         } else {
-            printer.printFileResponse(builder, chainMs, isSuccessful, code, header, segmentList, message)
+            printer.printFileResponse(
+                builder,
+                chainMs,
+                isSuccessful,
+                code,
+                header,
+                segmentList,
+                message
+            )
             return response
         }
 
@@ -66,8 +74,8 @@ class LoggingInterceptorImpl internal constructor(private val builder: LoggingIn
 
     private fun isNotFileRequest(subtype: String?): Boolean {
         return subtype != null && (subtype.contains("json") ||
-            subtype.contains("xml") ||
-            subtype.contains("plain") ||
-            subtype.contains("html"))
+                subtype.contains("xml") ||
+                subtype.contains("plain") ||
+                subtype.contains("html"))
     }
 }
