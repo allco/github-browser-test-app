@@ -6,7 +6,8 @@ sealed class User {
     data class Valid(
         val userId: String,
         val userName: String,
-        val token: GithubToken
+        val token: GithubToken,
+        val imageUrl: String?
     ) : User()
 
     object Invalid : User()

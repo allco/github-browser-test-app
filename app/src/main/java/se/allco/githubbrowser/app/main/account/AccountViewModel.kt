@@ -18,12 +18,14 @@ class AccountViewModel @Inject constructor(
     private val disposables = CompositeDisposable()
     private val _showLoading = MutableLiveData(false)
 
-    val userName: LiveData<String> =
-        repository
-            .getUserName()
-            .delayedSpinner(_showLoading)
-            .doOnError { errorMessage.postValue(getString(R.string.error_generic)) }
-            .toLiveData()
+    private val _data = repository
+        .getAccount()
+        .delayedSpinner(_showLoading)
+        .doOnError { errorMessage.postValue(getString(R.string.error_generic)) }
+        .toLiveData()
+
+    val userName: LiveData<String> = _data.map { it?.name }
+    val imageUrl = _data.map { it?.imageUrl }
 
     val errorMessage = MutableLiveData<String>(null)
     val showError: LiveData<Boolean> = errorMessage.map { !it.isNullOrBlank() }

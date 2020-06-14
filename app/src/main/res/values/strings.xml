@@ -18,5 +18,6 @@
 
     <string name="main_repos_error_fetching_data">Repositories fetching error.</string>
     <string name="main_repos_no_repos_found">Current GitHub user doesn\'t have any repository.</string>
+    <string name="login_avatar_cd">Avatar</string>
 
 </resources>

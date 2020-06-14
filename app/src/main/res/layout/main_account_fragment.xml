@@ -20,17 +20,30 @@
         android:layout_height="match_parent"
         >
 
+        <ImageView
+            android:id="@+id/image_avatar"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/lightGrey"
+            android:contentDescription="@string/login_avatar_cd"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:imageUrl="@{viewModel.imageUrl}"
+            tools:srcCompat="@tools:sample/avatars"
+            />
+
         <TextView
             android:id="@+id/text_user_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_width="374dp"
+            android:layout_height="17dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:text="@{viewModel.userName}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/image_avatar"
+            app:layout_constraintTop_toBottomOf="@+id/image_avatar"
             tools:text="@tools:sample/full_names"
             />
 
@@ -54,6 +67,8 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+            android:ellipsize="end"
+            android:maxLines="20"
             android:text="@{viewModel.errorMessage}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -79,9 +94,10 @@
             android:id="@+id/contentGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="button_logout,text_user_name"
+            app:constraint_referenced_ids="button_logout,text_user_name,image_avatar"
             bind:goneUnless="@{viewModel.showContent}"
             />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

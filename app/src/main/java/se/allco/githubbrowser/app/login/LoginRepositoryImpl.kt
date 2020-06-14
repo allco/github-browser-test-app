@@ -27,7 +27,13 @@ class LoginRepositoryImpl @Inject constructor(
     ManualLoginRepository {
 
     interface GetCurrentUserInfo {
-        data class Response(val id: String, val name: String?, val login: String)
+        data class Response(
+            val id: String,
+            val name: String?,
+            val login: String,
+            @SerializedName("avatar_url")
+            val imageUrl: String?
+        )
 
         @GET("/user")
         fun call(@Header("Authorization") authHeader: String): Single<Response>
@@ -82,7 +88,8 @@ class LoginRepositoryImpl @Inject constructor(
                 User.Valid(
                     token = token,
                     userId = it.id,
-                    userName = it.name ?: it.login
+                    userName = it.name ?: it.login,
+                    imageUrl = it.imageUrl
                 )
             }
 

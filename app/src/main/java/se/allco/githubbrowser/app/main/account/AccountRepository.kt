@@ -9,12 +9,20 @@ import javax.inject.Inject
 class AccountRepository @Inject constructor(
     private val userComponentHolder: UserComponentHolder
 ) {
+    data class Account(val name: String, val imageUrl: String?)
 
-    fun getUserName(): Observable<String> =
+    fun getAccount(): Observable<Account> =
         userComponentHolder
             .getUserComponentsFeed()
             .map { it.getCurrentUser() }
-            .map { requireNotNull(it as? User.Valid).userName }
+            .map { requireNotNull(it as? User.Valid).asAccount() }
 
     fun logoutUser(): Completable = userComponentHolder.logoutUser()
 }
+
+fun User.Valid.asAccount() =
+    AccountRepository.Account(
+        name = this.userName,
+        imageUrl = imageUrl
+    )
+

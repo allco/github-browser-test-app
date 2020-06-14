@@ -38,7 +38,7 @@ class ReposRepository @Inject constructor(private val retrofitFactory: RetrofitF
         fun call(@Query("sort") sortOrder: String = "updated"): Single<List<Repo>>
     }
 
-    fun getRepos() =
+    fun getRepos(): Single<List<Repo>> =
         retrofitFactory
             .create()
             .create(GetRepos::class.java)
