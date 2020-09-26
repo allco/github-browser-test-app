@@ -16,13 +16,16 @@ import se.allco.githubbrowser.app.login.manuallogin.ManualLoginRepository
 class LoginModule {
 
     @Provides
-    fun provideGithubLoginWebViewModel(impl: GithubLoginWebViewModelImpl): GithubLoginWebViewModel = impl
+    fun provideGithubLoginWebViewModel(impl: GithubLoginWebViewModelImpl): GithubLoginWebViewModel =
+        impl
 
     @Provides
-    fun provideAutoLoginFragmentListener(impl: LoginActivityViewModel): AutoLoginFragment.Listener = impl
+    fun provideAutoLoginFragmentListener(impl: LoginActivityViewModel): AutoLoginFragment.Listener =
+        impl
 
     @Provides
-    fun provideManualLoginFragmentListener(impl: LoginActivityViewModel): ManualLoginFragment.Listener = impl
+    fun provideManualLoginFragmentListener(impl: LoginActivityViewModel): ManualLoginFragment.Listener =
+        impl
 
     @Provides
     fun provideAutoLoginRepository(impl: LoginRepositoryImpl): AutoLoginRepository = impl

@@ -14,7 +14,11 @@ class ReposFragment @Inject constructor(
     private val viewModelProvider: Provider<ReposViewModel>
 ) : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? =
         MainReposFragmentBinding.inflate(inflater, container, false).also { binding ->
             binding.lifecycleOwner = viewLifecycleOwner
             binding.viewModel = getViewModel(viewModelProvider)

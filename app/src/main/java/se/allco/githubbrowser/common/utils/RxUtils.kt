@@ -1,9 +1,14 @@
 package se.allco.githubbrowser.common.utils
 
-import io.reactivex.*
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Maybe
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableEmitter
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 operator fun CompositeDisposable.plusAssign(disposable: Disposable?) {
@@ -11,7 +16,7 @@ operator fun CompositeDisposable.plusAssign(disposable: Disposable?) {
 }
 
 fun <T> Maybe<T>.toSingleOptional(): Single<Optional<T>> =
-    map { Optional.of(it) }.toSingle(Optional.None)
+    map { Optional.of(it) }.defaultIfEmpty(Optional.None)
 
 inline fun <reified T> Flowable<Optional<T>>.filterOptional(): Flowable<T> =
     ofType(Optional.Some::class.java).map { it.element as T }

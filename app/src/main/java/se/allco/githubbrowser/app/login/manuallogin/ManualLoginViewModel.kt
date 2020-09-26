@@ -5,10 +5,10 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import se.allco.githubbrowser.R
 import se.allco.githubbrowser.app.user.User
 import se.allco.githubbrowser.common.ui.delayedSpinner
@@ -42,7 +42,10 @@ class ManualLoginViewModel @Inject constructor(
     // Loading spinner parameters
     private val _showLoading = MutableLiveData(false)
     val showLoading: LiveData<Boolean> =
-        _showLoading.combine(showError, false) { loading, error -> error != true && loading == true }
+        _showLoading.combine(
+            showError,
+            false
+        ) { loading, error -> error != true && loading == true }
 
     // WebView readiness parameters
     private val _showContent = MutableLiveData(false)
@@ -72,13 +75,14 @@ class ManualLoginViewModel @Inject constructor(
             .delayedSpinner(_showLoading)
             .doOnSubscribe { renderState(State.Initializing) }
 
-    private fun waitForGithubCode(): Observable<GithubCode> =
-        webViewModel
+    private fun waitForGithubCode(): Observable<GithubCode> {
+        return webViewModel
             .states
             .takeUntil { it is GithubLoginWebViewModel.State.ResultCode }
             .doOnNext { it.asViewModelState()?.let(::renderState) }
             .ofType(GithubLoginWebViewModel.State.ResultCode::class.java)
             .map { it.code }
+    }
 
     private fun createErrorHandler(err: Throwable): Observable<User.Valid> {
         Timber.w(err, "ManualLoginViewModel failed")

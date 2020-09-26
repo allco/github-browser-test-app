@@ -21,7 +21,11 @@ class AutoLoginFragment @Inject constructor(
         fun onAutoLoginResult(user: User)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? =
         LoginAutoFragmentBinding.inflate(inflater, container, false)
             .also { binding ->
                 val viewModel = getViewModel(viewModelProvider)

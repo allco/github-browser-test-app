@@ -60,7 +60,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun initViews() {
         val viewModel = getViewModel()
-        val binding = DataBindingUtil.setContentView<LoginActivityBinding>(this, R.layout.login_activity)
+        val binding =
+            DataBindingUtil.setContentView<LoginActivityBinding>(this, R.layout.login_activity)
         binding.lifecycleOwner = this@LoginActivity
         binding.viewModel = viewModel
         viewModel.loggedInUser.observe(this@LoginActivity, ObserverNonNull(::onUserLoggedIn))

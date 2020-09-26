@@ -2,17 +2,24 @@ package se.allco.githubbrowser.common.utils
 
 import androidx.core.app.ComponentActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposables
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.LiveDataReactiveStreams
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.Transformations
+import io.reactivex.rxjava3.core.BackpressureStrategy
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
 import timber.log.Timber
 
 @Suppress("FunctionName")
-fun <T> ObserverNonNull(observer: (T) -> Unit): Observer<T> = Observer { value -> value?.apply(observer) }
+fun <T> ObserverNonNull(observer: (T) -> Unit): Observer<T> =
+    Observer { value -> value?.apply(observer) }
 
 fun <T : Any> Fragment.observe(liveData: LiveData<T>): Pair<LifecycleOwner, LiveData<T>> =
     Pair(viewLifecycleOwner, liveData)
@@ -123,7 +130,7 @@ fun <T> Observable<T>.toLiveData(disposableContainer: CompositeDisposable): Live
         if (!disposableContainer.isDisposed) {
             val dummyObserver = Observer<T> {}
             observeForever(dummyObserver)
-            disposableContainer.add(Disposables.fromAction { removeObserver(dummyObserver) })
+            disposableContainer.add(Disposable.fromAction { removeObserver(dummyObserver) })
         }
     }
 

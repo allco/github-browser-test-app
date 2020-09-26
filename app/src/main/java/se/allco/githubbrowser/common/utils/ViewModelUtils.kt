@@ -4,7 +4,11 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
-import androidx.annotation.*
+import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.IntegerRes
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -62,7 +66,8 @@ inline fun <reified T : ViewModel> FragmentActivity.getViewModel(viewModelProvid
 inline fun <reified T : ViewModel> FragmentActivity.getViewModel(crossinline viewModelProvider: () -> T): T =
     ViewModelProvider(this, createViewFactoryFactory { viewModelProvider() }).get(T::class.java)
 
-fun AndroidViewModel.getString(@StringRes res: Int): String = this.getApplication<Application>().getString(res)
+fun AndroidViewModel.getString(@StringRes res: Int): String =
+    this.getApplication<Application>().getString(res)
 
 fun AndroidViewModel.getString(@StringRes res: Int, vararg args: Any): String =
     this.getApplication<Application>().getString(res, *args)

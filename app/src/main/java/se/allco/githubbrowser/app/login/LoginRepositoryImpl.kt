@@ -1,13 +1,17 @@
 package se.allco.githubbrowser.app.login
 
 import com.google.gson.annotations.SerializedName
-import io.reactivex.Completable
-import io.reactivex.Maybe
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Maybe
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Headers
+import retrofit2.http.POST
 import se.allco.githubbrowser.BuildConfig
 import se.allco.githubbrowser.app.login.autologin.AutoLoginRepository
 import se.allco.githubbrowser.app.login.manuallogin.ManualLoginRepository

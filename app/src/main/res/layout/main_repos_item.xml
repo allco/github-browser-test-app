@@ -26,8 +26,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{viewModel.repo.name}"
-            bind:goneUnless="@{viewModel.repo.name != null}"
             android:textAppearance="?attr/textAppearanceHeadline6"
+            bind:goneUnless="@{viewModel.repo.name != null}"
             tools:text="@tools:sample/cities"
             />
 
@@ -36,8 +36,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{viewModel.repo.nameFull}"
-            bind:goneUnless="@{viewModel.repo.nameFull != null}"
             android:textAppearance="?attr/textAppearanceListItem"
+            bind:goneUnless="@{viewModel.repo.nameFull != null}"
             tools:text="@tools:sample/cities"
             />
 

@@ -11,8 +11,8 @@ import android.net.Network
 import android.net.NetworkInfo
 import android.os.Build
 import androidx.annotation.RequiresApi
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -49,7 +49,9 @@ class NetworkReporterImpl @Inject constructor(context: Context) : NetworkReporte
             val receiver = object : BroadcastReceiver() {
                 override fun onReceive(context: Context, intent: Intent) {
                     when {
-                        intent.hasExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY) -> emitter.onNext(false)
+                        intent.hasExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY) -> emitter.onNext(
+                            false
+                        )
                         else -> {
                             @Suppress("DEPRECATION")
                             (intent.extras?.get(ConnectivityManager.EXTRA_NETWORK_INFO) as? NetworkInfo)
@@ -64,12 +66,12 @@ class NetworkReporterImpl @Inject constructor(context: Context) : NetworkReporte
         }
     }
 
-    private val connectivityStatesStream by lazy {
+    private val connectivityStatesStream: Observable<Boolean> by lazy {
         when {
             Build.VERSION.SDK_INT >= 24 -> NetworkReporterApi24(context).connectivityStatesStream
             else -> NetworkReporterApi23(context).connectivityStatesStream
         }
-            .startWith(false)
+            .startWithItem(false)
             .distinctUntilChanged()
             .debounce(200, TimeUnit.MILLISECONDS, Schedulers.io())
             .replay(1)

@@ -3,11 +3,10 @@ package se.allco.githubbrowser.common.utils
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableEmitter
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
 
 class LifecycleObserver {
     var onPaused: (() -> Unit)? = null
@@ -71,7 +70,7 @@ fun Lifecycle.attachLifecycleEventsObserver(block: LifecycleObserver.() -> Unit)
             disposables.dispose()
         }
     }
-    disposables += Disposables.fromAction { removeObserver(observer) }
+    disposables += Disposable.fromAction { removeObserver(observer) }
     addObserver(observer)
     return disposables
 }

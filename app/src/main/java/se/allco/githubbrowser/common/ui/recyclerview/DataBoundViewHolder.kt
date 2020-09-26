@@ -30,13 +30,19 @@ class DataBoundViewHolder<T : ViewDataBinding> private constructor(val binding: 
     }
 
     fun onBind() {
-        checkState(expectedState = Lifecycle.State.CREATED, message = "DataBoundViewHolder.onBind error:")
+        checkState(
+            expectedState = Lifecycle.State.CREATED,
+            message = "DataBoundViewHolder.onBind error:"
+        )
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         lifecycleRegistry.currentState = Lifecycle.State.RESUMED
     }
 
     fun onUnbind() {
-        checkState(expectedState = Lifecycle.State.RESUMED, message = "DataBoundViewHolder.onUnbind error:")
+        checkState(
+            expectedState = Lifecycle.State.RESUMED,
+            message = "DataBoundViewHolder.onUnbind error:"
+        )
         lifecycleRegistry.currentState = Lifecycle.State.STARTED
         lifecycleRegistry.currentState = Lifecycle.State.CREATED
     }
@@ -62,8 +68,16 @@ class DataBoundViewHolder<T : ViewDataBinding> private constructor(val binding: 
          * @param <T> The type of the Binding class that will be generated for the `layoutId`.
          * @return A new ViewHolder that has a reference to the binding class
         </T> */
-        fun <T : ViewDataBinding> create(parent: ViewGroup, @LayoutRes layoutId: Int): DataBoundViewHolder<T> {
-            val binding = DataBindingUtil.inflate<T>(LayoutInflater.from(parent.context), layoutId, parent, false)
+        fun <T : ViewDataBinding> create(
+            parent: ViewGroup,
+            @LayoutRes layoutId: Int
+        ): DataBoundViewHolder<T> {
+            val binding = DataBindingUtil.inflate<T>(
+                LayoutInflater.from(parent.context),
+                layoutId,
+                parent,
+                false
+            )
             return DataBoundViewHolder(binding)
         }
     }

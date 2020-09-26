@@ -5,9 +5,9 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import se.allco.githubbrowser.R
 import se.allco.githubbrowser.common.ui.delayedSpinner
 import se.allco.githubbrowser.common.utils.combine
@@ -38,12 +38,18 @@ class ReposViewModel @Inject constructor(
         errorMessage.map { it != null }
     private val _showRetryButton = MutableLiveData(false)
     val showRetryButton =
-        _showRetryButton.combine(showError, false) { retry, error -> retry == true && error == true }
+        _showRetryButton.combine(
+            showError,
+            false
+        ) { retry, error -> retry == true && error == true }
 
     // Loading spinner parameters
     private val _showLoading = MutableLiveData(false)
     val showLoading: LiveData<Boolean> =
-        _showLoading.combine(showError, false) { loading, error -> error != true && loading == true }
+        _showLoading.combine(
+            showError,
+            false
+        ) { loading, error -> error != true && loading == true }
 
     // WebView readiness parameters
     private val _showContent = MutableLiveData(false)

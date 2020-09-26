@@ -28,7 +28,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        val binding = DataBindingUtil.setContentView<MainActiviyBinding>(this, R.layout.main_activiy)
+        val binding =
+            DataBindingUtil.setContentView<MainActiviyBinding>(this, R.layout.main_activiy)
         val navController = findNavController(R.id.nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(
             setOf(R.id.navigation_repos, R.id.navigation_account)

@@ -11,7 +11,12 @@ import android.os.Build
 import android.os.Vibrator
 import android.util.TypedValue
 import android.view.LayoutInflater
-import androidx.annotation.*
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.FloatRange
+import androidx.annotation.PluralsRes
+import androidx.annotation.RawRes
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
@@ -39,7 +44,10 @@ fun Context.getDrawableCompat(@DrawableRes resId: Int): Drawable =
 fun Context.getQuantityString(@PluralsRes id: Int, quantity: Int, vararg formatArgs: Any): String =
     resources.getQuantityString(id, quantity, *formatArgs)
 
-fun Context.getColorWithAlpha(@ColorRes resId: Int, @FloatRange(from = 0.0, to = 1.0) alpha: Float): Int {
+fun Context.getColorWithAlpha(
+    @ColorRes resId: Int,
+    @FloatRange(from = 0.0, to = 1.0) alpha: Float
+): Int {
     val eightBit = (255 * alpha).roundToInt()
     return ColorUtils.setAlphaComponent(getColorCompat(resId), eightBit)
 }

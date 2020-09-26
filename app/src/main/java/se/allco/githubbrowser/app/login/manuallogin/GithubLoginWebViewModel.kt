@@ -3,9 +3,9 @@ package se.allco.githubbrowser.app.login.manuallogin
 import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import se.allco.githubbrowser.BuildConfig
 import se.allco.githubbrowser.R
 import se.allco.githubbrowser.app.login.manuallogin.GithubLoginWebViewModel.State
@@ -43,7 +43,7 @@ class GithubLoginWebViewModelImpl @Inject constructor(
             .states()
             .switchMap(::onNetworkStateChanged)
             .mergeWith(stateInjector.observeOn(AndroidSchedulers.mainThread()))
-            .startWith(State.Initializing)
+            .startWithItem(State.Initializing)
 
     private fun onNetworkStateChanged(online: Boolean): Observable<State> =
         if (online) {
@@ -63,7 +63,13 @@ class GithubLoginWebViewModelImpl @Inject constructor(
         val state = uri.getQueryParameter("state")
         val code = uri.getQueryParameter("code")
         return when {
-            state == requestId && code != null -> true.also { stateInjector.onNext(State.ResultCode(code)) }
+            state == requestId && code != null -> true.also {
+                stateInjector.onNext(
+                    State.ResultCode(
+                        code
+                    )
+                )
+            }
             else -> false
         }
     }

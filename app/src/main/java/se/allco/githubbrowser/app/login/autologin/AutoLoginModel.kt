@@ -1,6 +1,6 @@
 package se.allco.githubbrowser.app.login.autologin
 
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Single
 import se.allco.githubbrowser.app.user.User
 import se.allco.githubbrowser.common.utils.toSingleOptional
 import javax.inject.Inject

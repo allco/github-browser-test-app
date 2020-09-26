@@ -1,11 +1,15 @@
 package se.allco.githubbrowser.common.ui
 
 import androidx.lifecycle.MutableLiveData
-import io.reactivex.*
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposables
-import io.reactivex.disposables.SerialDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Maybe
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.disposables.SerialDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import se.allco.githubbrowser.common.utils.delayIfNotNull
 import se.allco.githubbrowser.common.utils.plusAssign
 import se.allco.githubbrowser.common.utils.postValueIfChanged
@@ -67,14 +71,16 @@ fun <T> Observable<T>.delayedSpinner(
                 val elapsedTime = scheduler.now(TimeUnit.MILLISECONDS) - startTime
                 val delayMs = when {
                     elapsedTime < warmingUpPhaseDurationMs -> 0
-                    else -> (loadingPhaseDurationMs - (elapsedTime - warmingUpPhaseDurationMs)).coerceAtLeast(0)
+                    else -> (loadingPhaseDurationMs - (elapsedTime - warmingUpPhaseDurationMs)).coerceAtLeast(
+                        0
+                    )
                 }
 
                 Observable
                     .just(notification)
                     .delayIfNotNull(delayMs, TimeUnit.MILLISECONDS, scheduler)
                     .doOnNext {
-                        timerDisposable.set(Disposables.empty())
+                        timerDisposable.set(Disposable.empty())
                         onDelay(false)
                     }
             }

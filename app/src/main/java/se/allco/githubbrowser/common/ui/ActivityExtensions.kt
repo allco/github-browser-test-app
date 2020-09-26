@@ -1,9 +1,9 @@
 package se.allco.githubbrowser.common.ui
 
 import androidx.fragment.app.FragmentActivity
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposables
-import io.reactivex.disposables.SerialDisposable
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.disposables.SerialDisposable
 import se.allco.githubbrowser.app.login.LoginActivity
 import se.allco.githubbrowser.app.user.User
 import se.allco.githubbrowser.app.user.UserComponentHolder
@@ -36,7 +36,7 @@ fun FragmentActivity.ensureUserLoggedIn(onValidUser: () -> Unit) {
             )
         }
         onPaused = {
-            disposables.set(Disposables.empty())
+            disposables.set(Disposable.empty())
         }
     }
 

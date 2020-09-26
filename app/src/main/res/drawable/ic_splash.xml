@@ -4,7 +4,7 @@
     android:opacity="opaque"
     >
 
-    <item android:drawable="@android:color/white"/>
+    <item android:drawable="@android:color/white" />
 
     <item
         android:width="@dimen/splash_logo_size"

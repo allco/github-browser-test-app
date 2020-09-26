@@ -2,8 +2,8 @@ package se.allco.githubbrowser.app.user
 
 import android.content.SharedPreferences
 import com.google.gson.GsonBuilder
-import io.reactivex.Completable
-import io.reactivex.Maybe
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Maybe
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
@@ -42,7 +42,8 @@ class TokenCache @Inject constructor(
 
     fun write(token: GithubToken): Completable =
         Completable.fromAction {
-            prefs.edit().apply { putString(KEY, gsonBuilderProvider.get().create().toJson(token)) }.apply()
+            prefs.edit().apply { putString(KEY, gsonBuilderProvider.get().create().toJson(token)) }
+                .apply()
         }
 
     fun erase(): Completable = Completable.fromAction {

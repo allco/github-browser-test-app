@@ -4,10 +4,16 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.view.View
-import android.webkit.*
-import io.reactivex.Maybe
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import android.webkit.PermissionRequest
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import io.reactivex.rxjava3.core.Maybe
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import se.allco.githubbrowser.common.utils.subscribeSafely
 
 data class FileChooserRequest(
@@ -39,11 +45,20 @@ class WebViewSettings(
 
         private val isAPI24AndAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
 
-        override fun onReceivedError(view: WebView?, errorCode: Int, description: String?, failingUrl: String?) {
+        override fun onReceivedError(
+            view: WebView?,
+            errorCode: Int,
+            description: String?,
+            failingUrl: String?
+        ) {
             if (!isAPI24AndAbove) _states.onNext(State.ERROR)
         }
 
-        override fun onReceivedError(view: WebView?, request: WebResourceRequest?, err: WebResourceError?) {
+        override fun onReceivedError(
+            view: WebView?,
+            request: WebResourceRequest?,
+            err: WebResourceError?
+        ) {
             if (isAPI24AndAbove) _states.onNext(State.ERROR)
         }
 
@@ -57,9 +72,13 @@ class WebViewSettings(
 
         @Suppress("DEPRECATION")
         override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean =
-            overrideLoading?.takeIf { !isAPI24AndAbove }?.invoke(url?.let { Uri.parse(it) }) ?: false
+            overrideLoading?.takeIf { !isAPI24AndAbove }?.invoke(url?.let { Uri.parse(it) })
+                ?: false
 
-        override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean =
+        override fun shouldOverrideUrlLoading(
+            view: WebView?,
+            request: WebResourceRequest?
+        ): Boolean =
             overrideLoading?.takeIf { isAPI24AndAbove }?.invoke(request?.url) ?: false
     }
 

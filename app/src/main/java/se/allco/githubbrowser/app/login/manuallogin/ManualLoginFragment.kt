@@ -26,7 +26,11 @@ class ManualLoginFragment @Inject constructor(
         fun onManualLoginResult(user: User.Valid)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? =
         LoginManualFragmentBinding
             .inflate(inflater, container, false)
             .also { initViews(it) }
@@ -37,7 +41,10 @@ class ManualLoginFragment @Inject constructor(
         val viewModel = getViewModel(viewModelProvider)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.toolbar.setupWithNavController(navController, AppBarConfiguration(setOf(R.id.navigation_login_manual)))
+        binding.toolbar.setupWithNavController(
+            navController,
+            AppBarConfiguration(setOf(R.id.navigation_login_manual))
+        )
         viewModel.result.observe(this, ObserverNonNull(::onLoginResult))
         overrideOnBackPress {
             binding.webView.takeIf { it.canGoBack() }?.goBack() ?: kotlin.run {

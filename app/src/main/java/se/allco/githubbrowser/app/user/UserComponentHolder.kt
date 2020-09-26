@@ -3,10 +3,10 @@ package se.allco.githubbrowser.app.user
 import android.content.Context
 import android.webkit.CookieManager
 import androidx.annotation.MainThread
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import se.allco.githubbrowser.app._di.AppComponent
 import se.allco.githubbrowser.app.user._di.UserComponent
 import java.util.concurrent.TimeUnit

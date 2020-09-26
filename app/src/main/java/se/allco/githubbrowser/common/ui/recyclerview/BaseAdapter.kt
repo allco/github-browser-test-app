@@ -50,7 +50,11 @@ abstract class BaseAdapter<T : ViewDataBinding> : RecyclerView.Adapter<DataBound
                     val holder = recyclerView.getChildViewHolder(it) as DataBoundViewHolder<T>
                     when (recyclerView.getChildAdapterPosition(it)) {
                         -1 -> unbindItem(holder)
-                        else -> bindItem(holder, recyclerView.getChildAdapterPosition(it), emptyList())
+                        else -> bindItem(
+                            holder,
+                            recyclerView.getChildAdapterPosition(it),
+                            emptyList()
+                        )
                     }
                 }
             }
@@ -94,7 +98,11 @@ abstract class BaseAdapter<T : ViewDataBinding> : RecyclerView.Adapter<DataBound
         throw IllegalArgumentException("just overridden to make final.")
     }
 
-    override fun onBindViewHolder(holder: DataBoundViewHolder<T>, position: Int, payloads: List<Any>) {
+    override fun onBindViewHolder(
+        holder: DataBoundViewHolder<T>,
+        position: Int,
+        payloads: List<Any>
+    ) {
         if (!payloads.contains(DB_PAYLOAD)) {
             // When a VH is just created only then call the setters
             bindItem(holder, position, payloads)
@@ -128,7 +136,11 @@ abstract class BaseAdapter<T : ViewDataBinding> : RecyclerView.Adapter<DataBound
      * @param payloads The payloads that were passed into the onBind method
      */
     @CallSuper
-    protected open fun bindItem(holder: DataBoundViewHolder<T>, position: Int, payloads: List<Any>) {
+    protected open fun bindItem(
+        holder: DataBoundViewHolder<T>,
+        position: Int,
+        payloads: List<Any>
+    ) {
         holder.onBind()
     }
 

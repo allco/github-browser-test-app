@@ -64,7 +64,11 @@ class DataBoundAdapter(items: List<Item>?) : BaseAdapter<ViewDataBinding>() {
     fun updateItems(items: List<Item>) =
         updateItems(items, calculateDiff(items))
 
-    override fun bindItem(holder: DataBoundViewHolder<ViewDataBinding>, position: Int, payloads: List<Any>) {
+    override fun bindItem(
+        holder: DataBoundViewHolder<ViewDataBinding>,
+        position: Int,
+        payloads: List<Any>
+    ) {
         super.bindItem(holder, position, payloads)
         holder.binding.setVariable(BR.viewModel, listItems[position])
     }
