@@ -10,6 +10,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.disposables.SerialDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.PublishSubject
 import se.allco.githubbrowser.common.utils.delayIfNotNull
 import se.allco.githubbrowser.common.utils.plusAssign
 import se.allco.githubbrowser.common.utils.postValueIfChanged
@@ -44,7 +45,7 @@ fun <T> Observable<T>.delayedSpinner(
     warmingUpPhaseDurationMs: Long = DELAYED_SPINNER_WARMING_UP_PHASE_MS,
     loadingPhaseDurationMs: Long = DELAYED_SPINNER_LOADING_PHASE_MS,
     scheduler: Scheduler = Schedulers.io(),
-    onDelay: (started: Boolean) -> Unit
+    onDelay: (started: Boolean) -> Unit,
 ): Observable<T> =
     Observable.create<T> { emitter ->
         require(warmingUpPhaseDurationMs >= 0) { "delayedSpinner warmingUpPhaseDurationMs < 0" }
@@ -56,10 +57,10 @@ fun <T> Observable<T>.delayedSpinner(
         disposables += timerDisposable
         emitter.setDisposable(disposables)
 
-        timerDisposable.set(Observable
-            .timer(warmingUpPhaseDurationMs, TimeUnit.MILLISECONDS, scheduler)
-            .firstElement()
-            .subscribeSafely { onSuccess = { onDelay(true) } }
+        timerDisposable.set(
+            Observable.timer(warmingUpPhaseDurationMs, TimeUnit.MILLISECONDS, scheduler)
+                .firstElement()
+                .subscribeSafely { onSuccess = { onDelay(true) } }
         )
 
         @Suppress("UnstableApiUsage")
@@ -92,7 +93,7 @@ fun <T> Single<T>.delayedSpinner(
     warmingUpPhaseDurationMs: Long = DELAYED_SPINNER_WARMING_UP_PHASE_MS,
     loadingPhaseDurationMs: Long = DELAYED_SPINNER_LOADING_PHASE_MS,
     scheduler: Scheduler = Schedulers.io(),
-    onDelay: (started: Boolean) -> Unit
+    onDelay: (started: Boolean) -> Unit,
 ): Single<T> =
     toObservable().delayedSpinner(
         warmingUpPhaseDurationMs = warmingUpPhaseDurationMs,
@@ -105,7 +106,7 @@ fun <T> Maybe<T>.delayedSpinner(
     warmingUpPhaseDurationMs: Long = DELAYED_SPINNER_WARMING_UP_PHASE_MS,
     loadingPhaseDurationMs: Long = DELAYED_SPINNER_LOADING_PHASE_MS,
     scheduler: Scheduler = Schedulers.io(),
-    onDelay: (started: Boolean) -> Unit
+    onDelay: (started: Boolean) -> Unit,
 ): Maybe<T> =
     toObservable().delayedSpinner(
         warmingUpPhaseDurationMs = warmingUpPhaseDurationMs,
@@ -118,7 +119,7 @@ fun Completable.delayedSpinner(
     warmingUpPhaseDurationMs: Long = DELAYED_SPINNER_WARMING_UP_PHASE_MS,
     loadingPhaseDurationMs: Long = DELAYED_SPINNER_LOADING_PHASE_MS,
     scheduler: Scheduler = Schedulers.io(),
-    onDelay: (started: Boolean) -> Unit
+    onDelay: (started: Boolean) -> Unit,
 ): Completable =
     toObservable<Any>().delayedSpinner(
         warmingUpPhaseDurationMs = warmingUpPhaseDurationMs,
@@ -134,7 +135,7 @@ fun <T> Observable<T>.delayedSpinner(
     showSpinner: MutableLiveData<Boolean>,
     warmingUpPhaseDurationMs: Long = DELAYED_SPINNER_WARMING_UP_PHASE_MS,
     loadingPhaseDurationMs: Long = DELAYED_SPINNER_LOADING_PHASE_MS,
-    scheduler: Scheduler = Schedulers.io()
+    scheduler: Scheduler = Schedulers.io(),
 ): Observable<T> =
     doOnSubscribe { showSpinner.postValueIfChanged(false) }
         .delayedSpinner(
@@ -146,20 +147,11 @@ fun <T> Observable<T>.delayedSpinner(
 fun Completable.delayedSpinner(
     showSpinner: MutableLiveData<Boolean>,
     warmingUpPhaseDurationMs: Long = DELAYED_SPINNER_WARMING_UP_PHASE_MS,
-    loadingPhaseDurationMs: Long = DELAYED_SPINNER_LOADING_PHASE_MS
+    loadingPhaseDurationMs: Long = DELAYED_SPINNER_LOADING_PHASE_MS,
 ): Completable =
     toObservable<Any>()
         .delayedSpinner(showSpinner, warmingUpPhaseDurationMs, loadingPhaseDurationMs)
         .ignoreElements()
-
-fun <T> Maybe<T>.delayedSpinner(
-    showSpinner: MutableLiveData<Boolean>,
-    warmingUpPhaseDurationMs: Long = DELAYED_SPINNER_WARMING_UP_PHASE_MS,
-    loadingPhaseDurationMs: Long = DELAYED_SPINNER_LOADING_PHASE_MS
-): Maybe<T> =
-    toObservable()
-        .delayedSpinner(showSpinner, warmingUpPhaseDurationMs, loadingPhaseDurationMs)
-        .firstElement()
 
 fun <T> Single<T>.delayedSpinner(
     showSpinner: MutableLiveData<Boolean>,
@@ -169,3 +161,36 @@ fun <T> Single<T>.delayedSpinner(
     toObservable()
         .delayedSpinner(showSpinner, warmingUpPhaseDurationMs, loadingPhaseDurationMs)
         .firstOrError()
+
+fun <T> Observable<T>.addSmartLoadingState(
+    warmingUpPhaseDurationMs: Long = DELAYED_SPINNER_WARMING_UP_PHASE_MS,
+    loadingPhaseDurationMs: Long = DELAYED_SPINNER_LOADING_PHASE_MS,
+    scheduler: Scheduler = Schedulers.io(),
+    createLoadingState: () -> T,
+): Observable<T> {
+    val injector = PublishSubject.create<T>()
+    return delayedSpinner(
+        warmingUpPhaseDurationMs = warmingUpPhaseDurationMs,
+        loadingPhaseDurationMs = loadingPhaseDurationMs,
+        scheduler = scheduler,
+        onDelay = { showLoading ->
+            if (showLoading) {
+                injector.onNext(createLoadingState())
+            }
+        }
+    ).mergeWith(injector)
+}
+
+fun <T> Single<T>.addSmartLoadingState(
+    warmingUpPhaseDurationMs: Long = DELAYED_SPINNER_WARMING_UP_PHASE_MS,
+    loadingPhaseDurationMs: Long = DELAYED_SPINNER_LOADING_PHASE_MS,
+    scheduler: Scheduler = Schedulers.io(),
+    createLoadingState: () -> T,
+): Single<T> {
+    return toObservable().addSmartLoadingState(
+        warmingUpPhaseDurationMs = warmingUpPhaseDurationMs,
+        loadingPhaseDurationMs = loadingPhaseDurationMs,
+        scheduler = scheduler,
+        createLoadingState = createLoadingState,
+    ).firstOrError()
+}

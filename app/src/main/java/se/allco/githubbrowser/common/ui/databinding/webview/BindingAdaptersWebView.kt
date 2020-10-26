@@ -7,17 +7,16 @@ import androidx.databinding.BindingAdapter
 
 @BindingAdapter("destination")
 fun setWebViewDestination(view: WebView, destination: WebViewDestination?) {
-    destination?.apply {
-        view.loadUrl(destination.url, destination.headers)
-    }
+    if (destination == null) return
+    view.loadUrl(destination.url, destination.headers)
 }
 
 @SuppressLint("SetJavaScriptEnabled")
 @BindingAdapter("settings")
 fun setWebViewSettings(view: WebView, settings: WebViewSettings?) {
+
     if (settings == null) return
     view.webViewClient = settings.webClient
-    view.webChromeClient = settings.chromeClient
 
     when (settings.useCache) {
         true -> view.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK

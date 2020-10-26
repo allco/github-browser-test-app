@@ -7,17 +7,11 @@ import se.allco.githubbrowser.app.login.LoginRepository
 import se.allco.githubbrowser.app.login.LoginRepositoryImpl
 import se.allco.githubbrowser.app.login.autologin.AutoLoginFragment
 import se.allco.githubbrowser.app.login.autologin.AutoLoginRepository
-import se.allco.githubbrowser.app.login.manuallogin.GithubLoginWebViewModel
-import se.allco.githubbrowser.app.login.manuallogin.GithubLoginWebViewModelImpl
 import se.allco.githubbrowser.app.login.manuallogin.ManualLoginFragment
 import se.allco.githubbrowser.app.login.manuallogin.ManualLoginRepository
 
 @Module
 class LoginModule {
-
-    @Provides
-    fun provideGithubLoginWebViewModel(impl: GithubLoginWebViewModelImpl): GithubLoginWebViewModel =
-        impl
 
     @Provides
     fun provideAutoLoginFragmentListener(impl: LoginActivityViewModel): AutoLoginFragment.Listener =

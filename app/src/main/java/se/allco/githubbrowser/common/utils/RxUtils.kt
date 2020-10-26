@@ -34,6 +34,12 @@ fun <T> ObservableEmitter<T>.onNextSafely(value: T?) {
 fun <T> Observable<T>.delayIfNotNull(
     timeMs: Long,
     unit: TimeUnit = TimeUnit.MILLISECONDS,
-    scheduler: Scheduler = Schedulers.io()
+    scheduler: Scheduler = Schedulers.io(),
 ): Observable<T> =
     timeMs.takeIf { it > 0 }?.let { delay(it, unit, scheduler) } ?: this
+
+fun <T> Observable<T>.timeoutFirst(
+    timeMs: Long,
+    unit: TimeUnit = TimeUnit.MILLISECONDS,
+    scheduler: Scheduler = Schedulers.io(),
+): Observable<T> = ambWith(Observable.never<T>().timeout(timeMs, unit, scheduler))

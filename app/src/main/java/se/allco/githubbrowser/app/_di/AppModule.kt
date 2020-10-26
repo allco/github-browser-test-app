@@ -14,9 +14,9 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import se.allco.githubbrowser.BuildConfig
-import se.allco.githubbrowser.common.NetworkReporter
-import se.allco.githubbrowser.common.NetworkReporterImpl
 import se.allco.githubbrowser.common.logging.LoggingInterceptor
+import se.allco.githubbrowser.common.network_reporter.NetworkReporter
+import se.allco.githubbrowser.common.network_reporter.NetworkReporterImpl
 import javax.inject.Named
 import javax.inject.Singleton
 
